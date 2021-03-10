@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Form, Button} from "react-bootstrap";
-import { roomIdNumChars } from "./constants";
-import { randString } from "./random";
+import { roomIdNumChars } from "../utils/constants";
+import { randString } from "../utils/random";
 
 export default function JoinInput(props) {
   const [roomId, setRoomId] = useState("");

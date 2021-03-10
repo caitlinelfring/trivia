@@ -7,8 +7,8 @@ import {
   Col,
 } from 'react-bootstrap';
 
-import Join from "./Join";
-import Host from "./Host";
+import Join from "./components/Join";
+import Host from "./components/Host";
 // import Question from "./Question";
 
 const addAlertUserListener = () => {
