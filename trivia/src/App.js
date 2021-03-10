@@ -1,42 +1,34 @@
-import React, { useState } from "react";
-// import {
-//   // BrowserRouter as Router,
-//   HashRouter,
-//   Switch,
-//   Route,
-//   Link,
-//   useRouteMatch,
-//   useParams
-// } from "react-router-dom";
-// import {
-//   Button,
-//   Tooltip,
-//   Grid,
-//   Paper,
-//   Input,
-// } from '@material-ui/core';
-// import { makeStyles } from '@material-ui/core/styles';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faCopy } from '@fortawesome/free-solid-svg-icons';
-
-// import Peer from 'peerjs';
-
-// import { randString } from "./random";
-
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Button,
   Container,
   Row,
   Col,
-  Spinner,
 } from 'react-bootstrap';
+
 import Join from "./Join";
+import Host from "./Host";
+
+const addAlertUserListener = () => {
+  if (process.env.NODE_ENV === "production") {
+    const alertUser = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }
+};
 
 export default function App() {
+  useEffect(addAlertUserListener, []);
+
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [host, setHost] = useState(false);
+
   let ui = <>
     <Button variant="primary" onClick={() => setHost(true)}>Host</Button>{' '}
     <Button variant="secondary" onClick={() => setShowJoinInput(true)}>Join</Button>
@@ -47,7 +39,7 @@ export default function App() {
     </>
   } else if (host) {
     ui = <>
-      <Spinner animation="border" variant="primary" /><p>{`Hosting room TODO`}</p>
+      <Host />
     </>
   }
   return (
