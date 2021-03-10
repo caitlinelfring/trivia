@@ -3,5 +3,6 @@ export function randString(num) {
 }
 
 export function randStringToUpperCase(num) {
-  return randString(num).toUpperCase()
+  return "XYZH"
+  // return randString(num).toUpperCase();
 }
