@@ -5,11 +5,13 @@ import {
   Row,
   Button,
   Card,
+  ProgressBar,
 } from "react-bootstrap";
+import Manager from '../models/Manager';
 
 
 export default function QuestionView(props) {
-  const { question, isHost } = props;
+  const { question, isHost = false, onSelected = () => {}} = props;
 
   const [selected, setSelected] = useState(null);
   const selectionVariant = (i) => {
@@ -18,35 +20,37 @@ export default function QuestionView(props) {
     }
     return selected === i ? "info" : "outline-secondary";
   }
-  const clickHandler = (e) => setSelected(Number(e.target.id));
+  const clickHandler = (e) => {
+    setSelected(Number(e.target.id));
+    onSelected(Number(e.target.id))
+  }
 
   return (
     <Container fluid>
       <Card>
+        <Card.Header>{question.category}</Card.Header>
         <Card.Body>
           <Card.Title className="pb-3">{question.question}</Card.Title>
-          <Card.Text>
-            <Row xs={1} lg={2} className="justify-content-center">
-              <Col>
-                {question.map((a, i) => (
-                  <Button
-                    variant={selectionVariant(i)}
-                    size="lg"
-                    disabled={!!selected}
-                    key={i}
-                    id={i}
-                    onClick={isHost && clickHandler}
-                    block
-                    style={{ pointerEvents: isHost ? "none" : "auto" }}
-                  >
-                    {a}
-                  </Button>
-                ))}
-              </Col>
-            </Row>
-          </Card.Text>
+          <Row xs={1} lg={2} className="justify-content-center">
+            <Col>
+              {question.answers.map((a, i) => (
+                <Button
+                  variant={selectionVariant(i)}
+                  size="lg"
+                  disabled={!!selected}
+                  key={a}
+                  id={i}
+                  onClick={clickHandler}
+                  block
+                  style={{ pointerEvents: isHost ? "none" : "auto" }}
+                >
+                  {a}
+                </Button>
+              ))}
+            </Col>
+          </Row>
         </Card.Body>
-        <Card.Footer className="text-muted">{question.category}</Card.Footer>
+        {isHost && <Card.Footer className="text-muted blockquote-footer">This is a read-only view of the question for the host</Card.Footer>}
       </Card>
     </Container>
   )

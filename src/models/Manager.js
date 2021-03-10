@@ -1,8 +1,97 @@
 import Question from "./Question";
 
-export const getQuestions = async (num = 1) => {
-  // TODO: use session token
-  let response = await fetch(`https://opentdb.com/api.php?amount=${num}&type=multiple&encode=url3986`);
+const midQuestionPause = 1000;
+
+const sessionToken = (id) => {
+  return `dHJpdmlhCg-${id}`
+}
+
+const getQuestions = async (roomId = null, num = 1) => {
+  var query = { "amount": num, "encode": "url3986", "type": "multiple" };
+
+  if (roomId) {
+    query["token"] = sessionToken(roomId)
+  }
+  const searchParams = new URLSearchParams(query);
+
+  let response = await fetch(`https://opentdb.com/api.php?${searchParams.toString()}`);
   let data = await response.json();
   return data.results.map(d => new Question(d))
+}
+
+export default class Manager {
+  static instance = Manager.instance == null ? new Manager() : Manager.instance;
+
+  constructor() {
+    this.players = [];
+    this.round = 0;
+    this.questions = [];
+    this.onRoundComplete = () => { };
+    this.onNewQuestion = () => {};
+    this.populateQuestions();
+  }
+  async populateQuestions() {
+    this.questions = await getQuestions(null, 3);
+  }
+  addPlayer(player) {
+    this.players.push(player);
+  }
+
+  checkRoundDone() {
+    const incomplete = this.players.filter(player => !player.isRoundComplete(this.round));
+    return incomplete.length === 0;
+  }
+
+  gameComplete() {
+    this.players.forEach(player => {
+      player.send({ "gameComplete": this.players });
+    })
+  }
+  sendQuestion() {
+    if (this.round > this.questions.length) {
+      this.gameComplete();
+      return
+    }
+    const q = this.questions[this.round-1];
+    this.players.forEach(player => {
+      const onData = (d) => {
+        console.log(`got message from player ${player.name}. Correct? ${q.isCorrect(d.answer)}`);
+        player.record(this.round, d.answer, q.isCorrect(d.answer));
+        player.conn.off('data', onData);
+        this.goToNextRound();
+      }
+      player.conn.on('data', onData);
+      player.send({"newQuestion": q.forPlayer()})
+    })
+    this.onNewQuestion(q.forPlayer());
+  }
+
+  goToNextRound() {
+    if (this.checkRoundDone()) {
+      this.prepareNextRound();
+    }
+  }
+
+  prepareNextRound() {
+    this.nextRound()
+    if (this.round > this.questions.length) {
+      throw new Error("more rounds than questions");
+    }
+    console.log(this.players);
+    this.players.forEach(player => {
+      player.send({ "prepareForRound": this.round });
+    });
+    setTimeout(() => {
+      this.sendQuestion();
+    }, midQuestionPause);
+  }
+
+  progress() {
+    return Math.floor((this.round / this.questions.length) * 100);
+  }
+
+  nextRound() {
+    this.round++;
+    this.onRoundComplete();
+  }
 }

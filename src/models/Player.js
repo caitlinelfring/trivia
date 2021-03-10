@@ -3,16 +3,23 @@ class Player {
     this.conn = conn;
     this.name = name;
     this.state = "nameless";
-    this.score = Math.floor((Math.random() * 10) + 1);
-    // this.score = 0;
-    console.log(conn);
+    this.score = 0;
+    this.answers = {}
   }
 
   send(data) {
     this.conn.send(data);
   }
-  testSend() {
-    this.conn.send(`Hello ${this.name}!`);
+
+  record(round, answer, correct) {
+    this.answers[round] = {answer, correct};
+    if (correct) {
+      this.score++;
+    }
+  }
+
+  isRoundComplete(round) {
+    return !!this.answers[round]
   }
 }
 

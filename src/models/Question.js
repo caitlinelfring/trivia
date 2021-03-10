@@ -5,22 +5,28 @@ const shuffle = (list) => {
 export default class Question {
   constructor(props = {}) {
     const { question, correct_answer, incorrect_answers, category } = props;
-    this.correct = decodeURIComponent(correct_answer);
-    this.incorrect = incorrect_answers.map(decodeURIComponent);
+    this._correct = decodeURIComponent(correct_answer);
+    const incorrect = incorrect_answers.map(decodeURIComponent);
     this.category = decodeURIComponent(category);
     this.question = decodeURIComponent(question);
-    this.all = shuffle([this.correct, ...this.incorrect]);
+    this.answers = shuffle([this._correct, ...incorrect]);
   }
+
   correctIdx() {
-    return this.all.indexOf(this.correct);
+    return this.answers.indexOf(this._correct);
   }
   get(i) {
-    return this.all[i];
-  }
-  map(f) {
-    return this.all.map(f);
+    return this.answers[i];
   }
   isCorrect(i) {
     return this.correctIdx() === Number(i);
+  }
+  // strip out the correct answer for the player
+  forPlayer() {
+    return {
+      question: this.question,
+      answers: this.answers,
+      category: this.category,
+    };
   }
 }
