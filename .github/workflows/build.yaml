@@ -1,0 +1,37 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - run: npm install
+    - run: npm run build
+
+    - name: Commit to repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}
+        COMMIT_MSG: |
+          [Github Actions] Update build files
+          [skip ci]
+      run: |
+        # Hard-code user configuration
+        git config user.email "celfring@gmail.com"
+        git config user.name "Caitlin Elfring"
+        # Update origin with token
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        git checkout main
+        rm -f ./docs && mkdir ./docs
+        mv -f build/* ./docs
+        git add .
+        # Only commit and push if we have changes
+        git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin main)
