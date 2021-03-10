@@ -3,7 +3,8 @@ class Player {
     this.conn = conn;
     this.name = name;
     this.state = "nameless";
-    this.score = 0;
+    this.score = Math.floor((Math.random() * 10) + 1);
+    // this.score = 0;
     console.log(conn);
   }
 

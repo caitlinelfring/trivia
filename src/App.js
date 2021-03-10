@@ -9,7 +9,7 @@ import {
 
 import Join from "./Join";
 import Host from "./Host";
-import Question from "./Question";
+// import Question from "./Question";
 
 const addAlertUserListener = () => {
   if (process.env.NODE_ENV === "production") {
@@ -34,6 +34,7 @@ export default function App() {
     <Button variant="primary" onClick={() => setHost(true)}>Host</Button>{' '}
     <Button variant="secondary" onClick={() => setShowJoinInput(true)}>Join</Button>
   </>;
+
   if (showJoinInput) {
     ui = <>
       <Join />
@@ -44,6 +45,7 @@ export default function App() {
     </>
   }
   return (
+  <>
     <Container fluid="md" className={"pt-4"}>
       <Row>
         <Col>
@@ -51,11 +53,12 @@ export default function App() {
             <Card.Header>Trivia Night</Card.Header>
             <Card.Body>
               {ui}
-              <Question question={"question"} answers={["answer1", "answer2", "answer3", "answer4"]} />
+              {/* <Question question={"question"} answers={["answer1", "answer2", "answer3", "answer4"]} /> */}
             </Card.Body>
           </Card>
         </Col>
       </Row>
     </Container>
+    </>
   )
 }

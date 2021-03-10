@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import {
   Badge,
-  ListGroup,
   Button,
 } from "react-bootstrap";
 import Peer from 'peerjs';
@@ -10,6 +9,7 @@ import Peer from 'peerjs';
 import { randStringToUpperCase} from "./random";
 import { roomIdNumChars, peerConfig, errorAlert } from "./constants";
 import Player from "./Player";
+import Scoreboard from "./Scoreboard";
 
 let peer;
 
@@ -24,11 +24,20 @@ export default function Host(props) {
 
   if (!peer) {
     peer = new Peer(roomId, peerConfig);
-    peer.on('error', errorAlert);
+    peer.on('error', (err) => {
+      // if (props.onError) {
+      //   props.onError(err);
+      // }
+      console.error(err.type);
+      errorAlert(err);
+    });
     peer.on('open', function (id) {
       console.log('My peer ID is: ' + id);
       peer.on('connection', (conn) => {
         console.log(`peer connected: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+        conn.on('destroy', () => {
+          console.log(`peer destroyed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+        })
         conn.on('open', () => {
           const player = new Player(conn, conn.metadata.name);
           setMembers(prevState => [...prevState, player]);
@@ -46,7 +55,7 @@ export default function Host(props) {
   //   broadcast(members.map(m => m.name).join(", "));
   // }
 
-  const start = () => {
+  function start() {
     console.log("START!");
   }
 
@@ -60,12 +69,8 @@ export default function Host(props) {
       }
       <hr />
       <div className="pt-2">
-        <h5>{members.length > 0 ? "Players Ready" : "Waiting for Players..."}</h5>
-      <ListGroup>
-        {members.map((member, index) => (
-          <ListGroup.Item key={index}>{member.name}</ListGroup.Item>
-          ))}
-      </ListGroup>
+        <h5>{members.length > 0 ? "Scoreboard" : "Waiting for Players..."}</h5>
+        {members.length > 0 && <Scoreboard players={members} />}
       </div>
     </>
   )
