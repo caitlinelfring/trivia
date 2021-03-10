@@ -15,7 +15,9 @@ jobs:
         node-version: '14'
 
     - run: npm install
-    - run: npm run build
+    # https://github.com/peers/peerjs#faq
+    # avoid treating warnings as errors
+    - run: CI=false npm run build
 
     - name: Commit to repository
       env:
