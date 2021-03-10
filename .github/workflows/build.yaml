@@ -32,7 +32,7 @@ jobs:
         # Update origin with token
         git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         git checkout main
-        rm -f ./docs && mkdir ./docs
+        rm -rf ./docs && mkdir -p ./docs
         mv -f build/* ./docs
         git add .
         # Only commit and push if we have changes
