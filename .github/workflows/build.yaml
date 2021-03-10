@@ -22,25 +22,17 @@ jobs:
           ${{ runner.os }}-node-
 
     - run: npm install
-    # https://github.com/peers/peerjs#faq
-    # avoid treating warnings as errors
-    - run: CI=false npm run build
 
-    - name: Commit to repository
+    - name: Push to gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.github_token }}
-        COMMIT_MSG: |
-          [Github Actions] Update build files
-          [skip ci]
       run: |
         # Hard-code user configuration
         git config user.email "celfring@gmail.com"
         git config user.name "Caitlin Elfring"
         # Update origin with token
         git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        git checkout main
-        rm -rf ./docs && mkdir -p ./docs
-        mv -f build/* ./docs
-        git add .
-        # Only commit and push if we have changes
-        git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin main)
+
+        # https://github.com/peers/peerjs#faq
+        # avoid treating warnings as errors
+        CI=false npm run deploy
