@@ -50,7 +50,7 @@ export default function App() {
           <Card className="text-center">
             <Card.Header>Trivia Night</Card.Header>
             <Card.Body>
-              {/* {ui} */}
+              {ui}
               <Question question={"question"} answers={["answer1", "answer2", "answer3", "answer4"]} />
             </Card.Body>
           </Card>

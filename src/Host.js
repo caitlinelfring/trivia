@@ -42,9 +42,9 @@ export default function Host(props) {
       });
     });
   }
-  const onClick = () => {
-    broadcast(members.map(m => m.name).join(", "));
-  }
+  // const onClick = () => {
+  //   broadcast(members.map(m => m.name).join(", "));
+  // }
 
   const start = () => {
     console.log("START!");
