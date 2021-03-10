@@ -25,15 +25,9 @@ function Join(props) {
 
   // wow... this is bad, but best reconnect logic i can handle right now
   if (!peer) {
-    const onData = (data) => {
-      setMessages(prevState => [...prevState, data]);
-    }
-    const onConnected = () => {
-      setConnected(true);
-    };
-    const onClose = () => {
-      // TODO
-    }
+    const onData = (data) => setMessages(prevState => [...prevState, data]);
+    const onConnected = () => setConnected(true);
+    const onClose = () => {}
     peer = new PlayerPeer(roomId, state, onData, onConnected, onClose)
   }
   return (
