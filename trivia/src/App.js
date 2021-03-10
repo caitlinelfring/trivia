@@ -9,6 +9,7 @@ import {
 
 import Join from "./Join";
 import Host from "./Host";
+import Question from "./Question";
 
 const addAlertUserListener = () => {
   if (process.env.NODE_ENV === "production") {
@@ -49,7 +50,8 @@ export default function App() {
           <Card className="text-center">
             <Card.Header>Trivia Night</Card.Header>
             <Card.Body>
-              {ui}
+              {/* {ui} */}
+              <Question question={"question"} answers={["answer1", "answer2", "answer3", "answer4"]} />
             </Card.Body>
           </Card>
         </Col>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   Badge,
   ListGroup,
+  Button,
 } from "react-bootstrap";
 import Peer from 'peerjs';
 
@@ -44,17 +45,28 @@ export default function Host(props) {
   const onClick = () => {
     broadcast(members.map(m => m.name).join(", "));
   }
+
+  const start = () => {
+    console.log("START!");
+  }
+
   return (
     <>
       <h3>
         Starting room <Badge variant="secondary">{roomId}</Badge>
       </h3>
       <p>Others can join your room by going to <code>{window.location.origin}</code> and joining this Room ID</p>
+      {members.length > 0 && <Button variant="primary" onClick={() => start()}>Start</Button>
+      }
+      <hr />
+      <div className="pt-2">
+        <h5>{members.length > 0 ? "Players Ready" : "Waiting for Players..."}</h5>
       <ListGroup>
         {members.map((member, index) => (
-          <ListGroup.Item key={index} onClick={onClick}>{member.name}</ListGroup.Item>
-        ))}
+          <ListGroup.Item key={index}>{member.name}</ListGroup.Item>
+          ))}
       </ListGroup>
+      </div>
     </>
   )
 }
