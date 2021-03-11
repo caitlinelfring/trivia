@@ -8,8 +8,6 @@ import {
   ProgressBar,
 } from "react-bootstrap";
 
-import { randStringToUpperCase} from "../utils/random";
-import { roomIdNumChars } from "../utils/constants";
 import Scoreboard from "./Scoreboard";
 import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
@@ -20,7 +18,7 @@ import { cleanUri, winner } from "../utils/constants";
 let peer;
 
 export default function Host(props) {
-  const roomId = randStringToUpperCase(roomIdNumChars);
+  const { roomId } = props;
   const [players, setPlayers] = useState([]);
   const [started, setStarted] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
