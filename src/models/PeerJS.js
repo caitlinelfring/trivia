@@ -42,7 +42,7 @@ export function HostPeer(roomId, onData = noop, onConnectionOpened = noop) {
       console.log(`peer connected: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
       conn.on('destroy', () => {
         console.log(`peer destroyed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
-      })
+      });
       conn.on('open', () => {
         const player = new Player(conn, conn.metadata.name);
 
@@ -63,12 +63,12 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
     let conn;
     conn = p.connect(roomId, { metadata });
     conn.on('open', function () {
-      console.log(`open connection, connected: ${conn.open}`)
+      console.log(`open connection, connected: ${conn.open}`);
       onConnected();
       // Receive messages
       conn.on('data', function (data) {
         console.log('Received', data);
-        onData(data)
+        onData(data);
       });
       conn.on('close', () => {
         console.log("connection closed");
@@ -87,7 +87,7 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
 
   peer.on('disconnected', () => {
     console.log("disconnected");
-  })
+  });
 
   peer.on('open', function (id) {
     console.log('My peer ID is: ' + id);

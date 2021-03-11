@@ -3,7 +3,7 @@ class Player {
     this.conn = conn;
     this.name = name;
     this.score = 0;
-    this.answers = {}
+    this.answers = {};
   }
 
   send(data) {
@@ -18,7 +18,7 @@ class Player {
   }
 
   isRoundComplete(round) {
-    return !!this.answers[round]
+    return !!this.answers[round];
   }
 
   // Cannot serialize `this.conn` when sending player details to peers

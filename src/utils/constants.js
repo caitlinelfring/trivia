@@ -1,7 +1,7 @@
 export const roomIdNumChars = 4;
 
 export const errorAlert = (error) => {
-  if (!alert(`There has been a networking error; if you find yourself unable to play, please refresh the page.\n${error}`)) {
+  if (!alert(`There has been an error; the page will now refresh.\n${error}`)) {
     window.location.reload();
   }
   console.error(error);
@@ -9,14 +9,14 @@ export const errorAlert = (error) => {
 
 export const cleanUri = () => {
   const { protocol, host } = window.location;
-  const cleanHost = host.endsWith('/') ? host.slice(0, -1) : host;
 
   // Running on github
   if (host.includes("github")) {
-    return `${protocol}//${cleanHost}/trivia`
+    const path = host.endsWith('/') ? 'trivia' : '/trivia';
+    return `${protocol}//${host}${path}`;
   }
-  return `${protocol}//${cleanHost}`
-}
+  return `${protocol}//${host}`;
+};
 
 export const winner = (players) => {
   return players.sort((a, b) => b.score - a.score)[0];

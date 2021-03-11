@@ -1,6 +1,6 @@
 import {
   Table,
-} from "react-bootstrap"
+} from "react-bootstrap";
 export default function Scoreboard(props) {
   const { players } = props;
   players.sort((a, b) => b.score - a.score);
@@ -22,5 +22,5 @@ export default function Scoreboard(props) {
         ))}
       </tbody>
     </Table>
-  )
+  );
 }

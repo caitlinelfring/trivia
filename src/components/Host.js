@@ -34,36 +34,36 @@ export default function Host(props) {
       }
     };
     window.addEventListener("beforeunload", disconnect);
-  })
+  });
 
   if (!peer) {
     const onConnectionOpened = (player) => {
       setPlayers(prevState => [...prevState, player]);
       Manager.instance.addPlayer(player);
-    }
+    };
     const onData = (data) => {
       console.log('Received', data);
-    }
+    };
     peer = new HostPeer(roomId, onData, onConnectionOpened);
   }
 
   const start = () => {
     setStarted(true);
-    Manager.instance.prepareNextRound()
-  }
+    Manager.instance.prepareNextRound();
+  };
 
   Manager.instance.onRoundComplete = () => {
     setPrepareRound(Manager.instance.round);
     setPlayers(Manager.instance.players);
-  }
+  };
   Manager.instance.onNewQuestion = (q) => {
     setPrepareRound(null);
     setQuestion(q);
-  }
+  };
   Manager.instance.onGameComplete = () => {
     setGameComplete(true);
     setPrepareRound(null);
-  }
+  };
 
   return (
     <>
@@ -101,5 +101,5 @@ export default function Host(props) {
         </Col>
       </Row>
     </>
-  )
+  );
 }

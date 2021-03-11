@@ -15,12 +15,12 @@ export default function JoinInput(props) {
     const { value } = e.target;
     setRoomIdIsInvalid(false);
     setRoomId(value.substring(0, roomIdNumChars).toUpperCase());
-  }
+  };
 
   const handleNameChange = (e) => {
     const { value } = e.target;
     setName(value);
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -65,5 +65,5 @@ export default function JoinInput(props) {
       </Form.Group>
       <Button type="submit">Join</Button>
     </Form>
-  )
+  );
 }

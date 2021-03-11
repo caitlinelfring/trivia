@@ -41,11 +41,11 @@ export default function App() {
   if (isPlayer) {
     ui = <>
       <Join {...playerState}/>
-    </>
+    </>;
   } else if (host) {
     ui = <>
       <Host />
-    </>
+    </>;
   } else {
     ui = <>
       <h4>Want to host a Trivia game? Click the "Host" Button</h4>
@@ -74,5 +74,5 @@ export default function App() {
       </Row>
     </Container>
     </>
-  )
+  );
 }

@@ -38,17 +38,17 @@ function Join(props) {
       }
     };
     const onConnected = () => setConnected(true);
-    peer = new PlayerPeer(roomId, {name, roomId}, onData, onConnected)
+    peer = new PlayerPeer(roomId, {name, roomId}, onData, onConnected);
   }
 
   const choiceSelected = (choice) => {
     if (!peer.connections || !peer.connections[roomId]) {
-      console.error(`Not sending choice, no connections for roomId ${roomId}`)
+      console.error(`Not sending choice, no connections for roomId ${roomId}`);
       return;
     }
     const send = (c) => c.send({ name: name, answer: choice, question: question.question });
     peer.connections[roomId].forEach(send);
-  }
+  };
 
   return (
     <>{connected ||

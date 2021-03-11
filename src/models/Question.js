@@ -1,6 +1,6 @@
 const shuffle = (list) => {
-  return list.sort(() => Math.random() - 0.5)
-}
+  return list.sort(() => Math.random() - 0.5);
+};
 
 export default class Question {
   constructor(props = {}) {

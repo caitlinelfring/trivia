@@ -17,11 +17,11 @@ export default function QuestionView(props) {
       return "secondary";
     }
     return selected === i ? "info" : "outline-secondary";
-  }
+  };
   const clickHandler = (e) => {
     setSelected(Number(e.target.id));
-    onSelected(Number(e.target.id))
-  }
+    onSelected(Number(e.target.id));
+  };
 
   return (
     <Container fluid>
@@ -51,5 +51,5 @@ export default function QuestionView(props) {
         {isHost && <Card.Footer className="text-muted blockquote-footer">This is a read-only view of the question for the host</Card.Footer>}
       </Card>
     </Container>
-  )
+  );
 }
