@@ -1,3 +1,7 @@
+// Relevant issues
+// https://github.com/peers/peerjs/issues/608
+// https://github.com/peers/peerjs/issues/671#issuecomment-657085176
+
 import Peer from 'peerjs';
 
 import { errorAlert } from "../utils/constants";
@@ -26,7 +30,6 @@ if (process.env.NODE_ENV === "production") {
         { url: 'stun:stun4.l.google.com:19302' }
       ]
     },
-    debug: 3,
   };
 }
 
