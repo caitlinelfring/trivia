@@ -12,7 +12,7 @@ export const cleanUri = () => {
   const cleanHost = host.endsWith('/') ? host.slice(0, -1) : host;
 
   // Running on github
-  if (process.env.NODE_ENV === "production" && host.includes("github.com")) {
+  if (host.includes("github")) {
     return `${protocol}//${cleanHost}/trivia`
   }
   return `${protocol}//${cleanHost}`
