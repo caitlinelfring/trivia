@@ -86,10 +86,6 @@ export default class Manager {
     }, midQuestionPause);
   }
 
-  progress() {
-    return Math.floor((this.round / this.questions.length) * 100);
-  }
-
   nextRound() {
     this.round++;
     this.onRoundComplete();

@@ -35,7 +35,7 @@ export default function JoinInput(props) {
   return (
     <Form onSubmit={handleSubmit}>
     <Form.Group>
-      <Form.Label>Room ID</Form.Label>
+      <Form.Label>Game ID</Form.Label>
 
       <Form.Control
         // required
@@ -48,7 +48,7 @@ export default function JoinInput(props) {
         onChange={handleRoomChange}
       />
       <Form.Control.Feedback type="invalid">
-        {`Room ID should be ${roomIdNumChars} characters.`}
+        {`Game ID should be ${roomIdNumChars} characters.`}
       </Form.Control.Feedback>
     </Form.Group>
       <Form.Group>

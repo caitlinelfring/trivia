@@ -3,7 +3,6 @@ import {
   Spinner,
   Badge,
 } from "react-bootstrap";
-import JoinInput from "./JoinInput";
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 
@@ -11,35 +10,28 @@ import QuestionView from "./QuestionView";
 let peer;
 
 function Join(props) {
-  const [state, setState] = useState({
-    roomId: "",
-    name: "",
-  })
+  console.log(props);
+  const { name, roomId } = props;
 
   const [connected, setConnected] = useState(false);
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
-
-  const { roomId, name } = state;
-  if (roomId === "" || name === "") {
-    return <JoinInput onSubmit={setState} />
-  }
 
   // wow... this is bad, but best reconnect logic i can handle right now
   if (!peer) {
     const onData = (data) => {
       if (typeof data === "object") {
         if (data.newQuestion) {
-          setQuestion(data.newQuestion)
-          setPrepareRound(null)
+          setQuestion(data.newQuestion);
+          setPrepareRound(null);
         }
         if (data.prepareForRound) {
-          setPrepareRound(data.prepareForRound)
+          setPrepareRound(data.prepareForRound);
         }
       }
     };
     const onConnected = () => setConnected(true);
-    peer = new PlayerPeer(roomId, state, onData, onConnected)
+    peer = new PlayerPeer(roomId, {name, roomId}, onData, onConnected)
   }
 
   const choiceSelected = (choice) => {
@@ -54,6 +46,7 @@ function Join(props) {
     <>{connected ||
       <Spinner animation="border" variant="primary" />}
       <h4>{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
+      {connected && <p>Waiting for host to start the game.</p>}
       {!!prepareRound &&
         <>
           <Spinner animation="border" variant="primary" />

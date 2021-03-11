@@ -57,7 +57,6 @@ export default function Host(props) {
     setPrepareRound(null);
     setQuestion(q);
   }
-  console.log(`progress: ${Manager.instance.progress()}`);
   return (
     <>
       <Row>
@@ -65,7 +64,7 @@ export default function Host(props) {
           <h3>
             Trivia Game <Badge variant="secondary">{roomId}</Badge>
           </h3>
-          <p>Others can join this game by going to <code>{window.location.origin}</code> and joining this Room ID</p>
+          <p>Others can join this game by going to <code>{window.location.origin}</code> and joining this Game ID</p>
           {(players.length > 0 && !started) && <Button variant="primary" onClick={() => start()}>Start</Button>}
           {!!prepareRound &&
             <>
@@ -73,8 +72,18 @@ export default function Host(props) {
               <h5>Prepare for round {prepareRound}</h5>
             </>
           }
-          {(question && !prepareRound) && <QuestionView question={question} isHost={true} />}
-          {<ProgressBar animated now={Manager.instance.progress()} />}
+          {(question && !prepareRound) && (
+            <>
+            <QuestionView question={question} isHost={true} />
+            <ProgressBar
+              className={"mt-5"} animated
+              now={Manager.instance.round}
+              label={Manager.instance.round}
+              max={Manager.instance.questions.length}
+            />
+            </>
+          )}
+
 
         </Col>
         <Col xs={12} md={4}>
