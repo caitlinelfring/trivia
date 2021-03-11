@@ -19,5 +19,7 @@ export const cleanUri = () => {
 };
 
 export const winner = (players) => {
-  return players.sort((a, b) => b.score - a.score)[0];
-}
+  const sorted = players.sort((a, b) => b.score - a.score);
+  const top = sorted[0].score;
+  return sorted.filter(p => p.score === top);
+};
