@@ -1,7 +1,7 @@
 import Question from "./Question";
 
 const midQuestionPause = 1000;
-const defaultQuestions = 2;
+const defaultQuestions = 10;
 
 const sessionToken = (id) => {
   return `dHJpdmlhCg-${id}`
