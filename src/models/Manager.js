@@ -46,7 +46,7 @@ export default class Manager {
 
   gameComplete() {
     this.players.forEach(player => {
-      player.send({ "gameComplete": this.players.map(p => p.details()) });
+      player.send({ "gameComplete": this.players.map(p => p.serialize()) });
     });
     this.onGameComplete();
   }

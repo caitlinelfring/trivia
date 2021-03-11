@@ -22,7 +22,7 @@ class Player {
   }
 
   // Cannot serialize `this.conn` when sending player details to peers
-  details() {
+  serialize() {
     return {
       name: this.name,
       score: this.score,
