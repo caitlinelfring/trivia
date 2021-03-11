@@ -6,3 +6,18 @@ export const errorAlert = (error) => {
   }
   console.error(error);
 };
+
+export const cleanUri = () => {
+  const { protocol, host } = window.location;
+  const cleanHost = host.endsWith('/') ? host.slice(0, -1) : host;
+
+  // Running on github
+  if (process.env.NODE_ENV === "production" && host.includes("github.com")) {
+    return `${protocol}//${cleanHost}/trivia`
+  }
+  return `${protocol}//${cleanHost}`
+}
+
+export const winner = (players) => {
+  return players.sort((a, b) => b.score - a.score)[0];
+}

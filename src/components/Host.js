@@ -11,9 +11,11 @@ import {
 import { randStringToUpperCase} from "../utils/random";
 import { roomIdNumChars } from "../utils/constants";
 import Scoreboard from "./Scoreboard";
+import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
+import { cleanUri, winner } from "../utils/constants";
 
 let peer;
 
@@ -21,6 +23,7 @@ export default function Host(props) {
   const roomId = randStringToUpperCase(roomIdNumChars);
   const [players, setPlayers] = useState([]);
   const [started, setStarted] = useState(false);
+  const [gameComplete, setGameComplete] = useState(false);
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
 
@@ -57,6 +60,11 @@ export default function Host(props) {
     setPrepareRound(null);
     setQuestion(q);
   }
+  Manager.instance.onGameComplete = () => {
+    setGameComplete(true);
+    setPrepareRound(null);
+  }
+
   return (
     <>
       <Row>
@@ -64,15 +72,15 @@ export default function Host(props) {
           <h3>
             Trivia Game <Badge variant="secondary">{roomId}</Badge>
           </h3>
-          <p>Others can join this game by going to <code>{window.location.origin}</code> and joining this Game ID</p>
+          <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
           {(players.length > 0 && !started) && <Button variant="primary" onClick={() => start()}>Start</Button>}
-          {!!prepareRound &&
+          {(!!prepareRound && !gameComplete) &&
             <>
               <Spinner animation="border" variant="primary" />
               <h5>Prepare for round {prepareRound}</h5>
             </>
           }
-          {(question && !prepareRound) && (
+          {(question && !prepareRound && !gameComplete) && (
             <>
             <QuestionView question={question} isHost={true} />
             <ProgressBar
@@ -83,12 +91,11 @@ export default function Host(props) {
             />
             </>
           )}
-
-
+          {gameComplete && <WinnerView winner={winner(players)} />}
         </Col>
         <Col xs={12} md={4}>
           <div className="pt-2">
-            <h5>{players.length > 0 ? "Scoreboard" : "Waiting for Players..."}</h5>
+            {players.length > 0 || <h5>Waiting for Players...</h5>}
             {players.length > 0 && <Scoreboard players={players} />}
           </div>
         </Col>

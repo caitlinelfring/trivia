@@ -5,6 +5,8 @@ import {
 } from "react-bootstrap";
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
+import WinnerView from "./WinnerView";
+import { winner } from "../utils/constants";
 
 // Global state to avoid reconnect errors when the property is re
 let peer;
@@ -16,10 +18,12 @@ function Join(props) {
   const [connected, setConnected] = useState(false);
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
+  const [gameComplete, setGameComplete] = useState(null);
 
   // wow... this is bad, but best reconnect logic i can handle right now
   if (!peer) {
     const onData = (data) => {
+      console.log(`got data: ${data}`);
       if (typeof data === "object") {
         if (data.newQuestion) {
           setQuestion(data.newQuestion);
@@ -27,6 +31,9 @@ function Join(props) {
         }
         if (data.prepareForRound) {
           setPrepareRound(data.prepareForRound);
+        }
+        if (data.gameComplete) {
+          setGameComplete(data.gameComplete);
         }
       }
     };
@@ -42,18 +49,21 @@ function Join(props) {
     const send = (c) => c.send({ name: name, answer: choice, question: question.question });
     peer.connections[roomId].forEach(send);
   }
+
   return (
     <>{connected ||
       <Spinner animation="border" variant="primary" />}
       <h4>{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
-      {connected && <p>Waiting for host to start the game.</p>}
-      {!!prepareRound &&
+      {(!question && connected) && <p>Waiting for host to start the game.</p>}
+      {(!!prepareRound && !gameComplete) &&
         <>
           <Spinner animation="border" variant="primary" />
           <h5>Prepare for round {prepareRound}</h5>
         </>
       }
-      {(question && !prepareRound) && <QuestionView question={question} onSelected={choiceSelected} />}
+      {(question && !prepareRound && !gameComplete) && <QuestionView question={question} onSelected={choiceSelected} />}
+      {gameComplete && <WinnerView winner={winner(gameComplete)} />}
+
     </>
   );
 }

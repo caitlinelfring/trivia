@@ -6,7 +6,7 @@ export default function Scoreboard(props) {
   players.sort((a, b) => b.score - a.score);
 
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover responsive size="sm">
       <thead>
         <tr>
           <th>Score</th>

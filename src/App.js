@@ -10,6 +10,7 @@ import {
 import Join from "./components/Join";
 import Host from "./components/Host";
 import JoinInput from "./components/JoinInput";
+import { cleanUri } from "./utils/constants";
 
 const addAlertUserListener = () => {
   if (process.env.NODE_ENV === "production") {
@@ -25,6 +26,10 @@ const addAlertUserListener = () => {
 };
 
 export default function App() {
+  // Clean the url in the browser bar.
+  // This might need to go away if I ever want to auto-join from a fragment in the url
+  window.history.replaceState({}, document.title, cleanUri());
+
   useEffect(addAlertUserListener, []);
 
   const [isPlayer, setIsPlayer] = useState(false);

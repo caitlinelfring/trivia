@@ -1,6 +1,7 @@
 import Question from "./Question";
 
 const midQuestionPause = 1000;
+const defaultQuestions = 2;
 
 const sessionToken = (id) => {
   return `dHJpdmlhCg-${id}`
@@ -27,11 +28,12 @@ export default class Manager {
     this.round = 0;
     this.questions = [];
     this.onRoundComplete = () => { };
+    this.onGameComplete = () => {};
     this.onNewQuestion = () => {};
     this.populateQuestions();
   }
   async populateQuestions() {
-    this.questions = await getQuestions(null, 3);
+    this.questions = await getQuestions(null, defaultQuestions);
   }
   addPlayer(player) {
     this.players.push(player);
@@ -44,9 +46,11 @@ export default class Manager {
 
   gameComplete() {
     this.players.forEach(player => {
-      player.send({ "gameComplete": this.players });
-    })
+      player.send({ "gameComplete": this.players.map(p => p.details()) });
+    });
+    this.onGameComplete();
   }
+
   sendQuestion() {
     if (this.round > this.questions.length) {
       this.gameComplete();
@@ -75,7 +79,8 @@ export default class Manager {
   prepareNextRound() {
     this.nextRound()
     if (this.round > this.questions.length) {
-      throw new Error("more rounds than questions");
+      this.gameComplete();
+      return
     }
     console.log(this.players);
     this.players.forEach(player => {
