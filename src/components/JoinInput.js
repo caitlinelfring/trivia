@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import {Form, Button} from "react-bootstrap";
+import {
+  Form,
+  Button,
+} from "react-bootstrap";
 import { roomIdNumChars } from "../utils/constants";
-import { randString } from "../utils/random";
 
 export default function JoinInput(props) {
   const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
-  // const [roomIdIsInvalid, setRoomIdIsInvalid] = useState(false);
+  const [roomIdIsInvalid, setRoomIdIsInvalid] = useState(false);
 
-  // const roomIsValid = (e) => e.length === roomIdNumChars;
+  const roomIsValid = (e) => e.length === roomIdNumChars;
   const handleRoomChange = (e) => {
     const { value } = e.target;
-    // setRoomIdIsInvalid(false);
+    setRoomIdIsInvalid(false);
     setRoomId(value.substring(0, roomIdNumChars).toUpperCase());
   }
 
@@ -22,14 +24,13 @@ export default function JoinInput(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // if (!roomIsValid(roomId)) {
-    //   setRoomIdIsInvalid(true);
-    //   return;
-    // }
+    if (!roomIsValid(roomId)) {
+      setRoomIdIsInvalid(true);
+      return;
+    }
     console.log(`Submitting name: ${name}, roomId: ${roomId}`);
     if (props.onSubmit) {
-      // props.onSubmit({roomId: roomId, name: name});
-      props.onSubmit({roomId: "XYZH", name: randString(5)});
+      props.onSubmit({roomId: roomId, name: name});
     }
   };
   return (
@@ -38,8 +39,8 @@ export default function JoinInput(props) {
       <Form.Label>Game ID</Form.Label>
 
       <Form.Control
-        // required
-        // isInvalid={!!roomIdIsInvalid}
+        required
+        isInvalid={!!roomIdIsInvalid}
         id="roomId"
         type="text"
         placeholder="XXXX"
@@ -54,7 +55,7 @@ export default function JoinInput(props) {
       <Form.Group>
         <Form.Label>Your Name</Form.Label>
         <Form.Control
-          // required
+          required
           id="name"
           type="text"
           placeholder="Moira Rose"

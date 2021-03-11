@@ -5,9 +5,7 @@ import {
   Row,
   Button,
   Card,
-  ProgressBar,
 } from "react-bootstrap";
-import Manager from '../models/Manager';
 
 
 export default function QuestionView(props) {
