@@ -13,7 +13,7 @@ import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
-import { cleanUri, winner } from "../utils/constants";
+import { cleanUri, getWinners } from "../utils/constants";
 
 let peer;
 
@@ -89,7 +89,7 @@ export default function Host(props) {
             />
             </>
           )}
-          {gameComplete && <WinnerView winner={winner(players)} />}
+          {gameComplete && <WinnerView winners={getWinners(players)} />}
         </Col>
         <Col xs={12} md={4}>
           <div className="pt-2">

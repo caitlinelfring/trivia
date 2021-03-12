@@ -6,7 +6,7 @@ import {
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
-import { winner } from "../utils/constants";
+import { getWinners } from "../utils/constants";
 
 // Global state to avoid reconnect errors when the property is re
 let peer;
@@ -63,8 +63,7 @@ function Join(props) {
         </>
       }
       {(question && !prepareRound && !gameComplete) && <QuestionView question={question} onSelected={choiceSelected} />}
-      {gameComplete && <WinnerView winner={winner(gameComplete)} />}
-
+      {gameComplete && <WinnerView winners={getWinners(gameComplete)} />}
     </>
   );
 }
