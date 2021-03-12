@@ -23,3 +23,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 * [ ] Show player submitted status for round
 * [ ] Toast when new user joins
 * [ ] Avatars / colors?
+* [ ] Use bootstrap alert instead of `alert("error")`

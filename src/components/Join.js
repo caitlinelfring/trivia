@@ -12,7 +12,6 @@ import { winner } from "../utils/constants";
 let peer;
 
 function Join(props) {
-  console.log(props);
   const { name, roomId } = props;
 
   const [connected, setConnected] = useState(false);
