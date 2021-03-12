@@ -8,7 +8,7 @@ const sessionToken = (id) => {
 };
 
 const getQuestions = async (roomId = null, num = 1) => {
-  var query = { "amount": num, "encode": "url3986", "type": "multiple", "category": "18" };
+  var query = { "amount": num, "encode": "url3986", "type": "multiple" };
 
   if (roomId) {
     query["token"] = sessionToken(roomId);

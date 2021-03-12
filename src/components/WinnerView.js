@@ -12,6 +12,7 @@ const getWinners = (players) => {
 
 export default function WinnerView(props) {
   const { players } = props;
+  if (!players) { return; }
   const winners = getWinners(players);
   const winnerOne = winners[0];
   const numWinners = winners.length;
