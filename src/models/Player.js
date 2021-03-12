@@ -1,6 +1,8 @@
 class Player {
   constructor(conn, name) {
     this.conn = conn;
+    console.log(`player: ${name} connectionId: ${conn.connectionId}`);
+    this.connectionId = conn.connectionId;
     this.name = name;
     this.score = 0;
     this.answers = {};

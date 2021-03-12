@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "production") {
   };
 }
 
-export function HostPeer(roomId, onData = noop, onConnectionOpened = noop) {
+export function HostPeer(roomId, onData = noop, onConnectionOpened = noop, onConnectionClosed = noop) {
   const peer = new Peer(roomId, peerConfig);
   peer.on('error', (err) => {
     console.error(err.type);
@@ -44,7 +44,11 @@ export function HostPeer(roomId, onData = noop, onConnectionOpened = noop) {
     peer.on('connection', (conn) => {
       console.log(`peer connected: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
       conn.on('destroy', () => {
-        console.log(`peer destroyed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+        console.log(`conn destroyed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+      });
+      conn.on('close', () => {
+        console.log(`conn closed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+        onConnectionClosed(conn.connectionId);
       });
       conn.on('open', () => {
         const player = new Player(conn, conn.metadata.name);
@@ -68,7 +72,7 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
     conn.on('open', function () {
       console.log(`open connection, connected: ${conn.open}`);
       onConnected();
-      // Receive messages
+
       conn.on('data', function (data) {
         console.log('Received', data);
         onData(data);
@@ -78,7 +82,6 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
         conn = newConnection(p);
         onClose();
       });
-      conn.send('Hello!');
     });
     return conn;
   };

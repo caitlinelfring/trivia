@@ -27,6 +27,7 @@ export default class Manager {
     this.players = [];
     this.round = 0;
     this.questions = [];
+    this.currentQuestion = null;
     this.onRoundComplete = () => { };
     this.onGameComplete = () => {};
     this.onNewQuestion = () => {};
@@ -37,6 +38,18 @@ export default class Manager {
   }
   addPlayer(player) {
     this.players.push(player);
+    if (this.currentQuestion) {
+      this.sendQuestion();
+    }
+  }
+
+  removeId(id) {
+    const ndx = this.players.findIndex(p => p.connectionId === id);
+    console.log(`idx: ${ndx}`);
+    if (ndx !== -1) {
+      this.players.splice(ndx, 1);
+    }
+    console.log(this.players);
   }
 
   checkRoundDone() {
@@ -49,6 +62,7 @@ export default class Manager {
       player.send({ "gameComplete": this.players.map(p => p.serialize()) });
     });
     this.onGameComplete();
+    this.currentQuestion = null;
   }
 
   sendQuestion() {
@@ -56,19 +70,19 @@ export default class Manager {
       this.gameComplete();
       return;
     }
-    const q = this.questions[this.round-1];
-    console.log(`Question: ${q.question}, answer: ${q._correct}`);
+    this.currentQuestion = this.questions[this.round-1];
+    console.log(`Question: ${this.currentQuestion.question}, answer: ${this.currentQuestion._correct}`);
     this.players.forEach(player => {
       const onData = (d) => {
-        console.log(`got message from player ${player.name}. Correct? ${q.isCorrect(d.answer)}`);
-        player.record(this.round, d.answer, q.isCorrect(d.answer));
+        console.log(`got message from player ${player.name}. Correct? ${this.currentQuestion.isCorrect(d.answer)}`);
+        player.record(this.round, d.answer, this.currentQuestion.isCorrect(d.answer));
         player.conn.off('data', onData);
         this.goToNextRound();
       };
       player.conn.on('data', onData);
-      player.send({"newQuestion": q.forPlayer()});
+      player.send({"newQuestion": this.currentQuestion.forPlayer()});
     });
-    this.onNewQuestion(q.forPlayer());
+    this.onNewQuestion(this.currentQuestion.forPlayer());
   }
 
   goToNextRound() {
@@ -95,5 +109,11 @@ export default class Manager {
   nextRound() {
     this.round++;
     this.onRoundComplete();
+  }
+
+  newGame() {
+    this.round = 0;
+    this.players.forEach(p => p.score = 0);
+    this.populateQuestions();
   }
 }

@@ -24,48 +24,59 @@ export default function Host(props) {
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
 
+
+  Manager.instance.onRoundComplete = () => {
+    setPrepareRound(Manager.instance.round);
+    setPlayers(Manager.instance.players);
+  };
+  Manager.instance.onNewQuestion = (q) => {
+    setPrepareRound(null);
+    setQuestion(q);
+  };
+  Manager.instance.onGameComplete = () => {
+    setGameComplete(true);
+    setPrepareRound(null);
+  };
   useEffect(() => {
     if (!peer) {
       const onConnectionOpened = (player) => {
-        setPlayers(prevState => [...prevState, player]);
         Manager.instance.addPlayer(player);
+        setPlayers(Manager.instance.players);
+      };
+      const onConnectionClosed = (id) => {
+        Manager.instance.removeId(id);
+        setPlayers(Manager.instance.players);
       };
       const onData = (data) => {
         console.log('Received', data);
       };
-      setPeer(new HostPeer(roomId, onData, onConnectionOpened));
+      setPeer(new HostPeer(roomId, onData, onConnectionOpened, onConnectionClosed));
     }
 
-    Manager.instance.onRoundComplete = () => {
-      setPrepareRound(Manager.instance.round);
-      setPlayers(Manager.instance.players);
+    const disconnect = () => {
+      console.log("Triggered disconnect");
+      if (peer) {
+        Manager.instance.players = [];
+        Manager.instance.onRoundComplete = () => {};
+        Manager.instance.onNewQuestion = () => {};
+        Manager.instance.onGameComplete = () => {};
+        peer.destroy();
+      }
     };
-    Manager.instance.onNewQuestion = (q) => {
-      setPrepareRound(null);
-      setQuestion(q);
-    };
-    Manager.instance.onGameComplete = () => {
-      setGameComplete(true);
-      setPrepareRound(null);
-    };
-    // const disconnect = () => {
-    //   console.log("Triggered disconnect");
-    //   if (peer) {
-    //     Manager.instance.players = [];
-    //     Manager.instance.onRoundComplete = () => {};
-    //     Manager.instance.onNewQuestion = () => {};
-    //     Manager.instance.onGameComplete = () => {};
-    //     peer.destroy();
-    //   }
-    // };
-    // window.addEventListener("beforeunload", disconnect);
-    // return () => window.removeEventListener("beforeunload", disconnect);
+    window.addEventListener("beforeunload", disconnect);
+    return () => window.removeEventListener("beforeunload", disconnect);
   }, [roomId, peer]);
 
   const start = () => {
     setStarted(true);
     Manager.instance.prepareNextRound();
   };
+
+  function newGame() {
+    Manager.instance.newGame();
+    setGameComplete(false);
+    start();
+  }
 
   return (
     <>
@@ -95,12 +106,14 @@ export default function Host(props) {
             />
             </div>
           )}
-          {gameComplete && <WinnerView players={players} />}
+          {(started && gameComplete) && <>
+            <WinnerView players={players} />
+            <Button variant="primary" onClick={() => newGame()}>New Game</Button>
+          </>}
         </Col>
         <Col xs={12} md={4}>
           <div className="pt-2">
-            {players.length > 0 || <h5>Waiting for Players...</h5>}
-            {players.length > 0 && <Scoreboard players={players} />}
+            {players.length > 0 ? <Scoreboard players={players} /> : <h5>Waiting for Players...</h5>}
           </div>
         </Col>
       </Row>

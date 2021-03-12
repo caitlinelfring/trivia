@@ -24,6 +24,7 @@ function Join(props) {
         setPrepareRound(null);
       }
       if (data.prepareForRound) {
+        setGameComplete(false);
         setPrepareRound(data.prepareForRound);
       }
       if (data.gameComplete) {
@@ -33,10 +34,7 @@ function Join(props) {
   };
   const onConnected = () => setConnected(true);
   useEffect(() => {
-    // wow... this is bad, but best reconnect logic i can handle right now
-    if (!peer) {
-      setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected));
-    }
+    !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected));
   }, [name, roomId, peer]);
 
 
