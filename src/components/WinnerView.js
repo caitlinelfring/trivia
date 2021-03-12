@@ -24,7 +24,7 @@ export default function WinnerView(props) {
     return (
       <>
         <h1>It's a {numWinners} way tie!</h1>
-        <p>Our winners are {winners.join(", ")} with {winnerOne.score} correct answers</p>
+        <p>Our winners are <strong>{winners.map(w => w.name).join(", ")}</strong> with <code>{winnerOne.score}</code> correct answers</p>
       </>
     );
 
