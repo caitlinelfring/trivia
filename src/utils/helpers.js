@@ -18,7 +18,7 @@ export const cleanUri = () => {
   return `${protocol}//${host}`;
 };
 
-export const winner = (players) => {
+export const getWinners = (players) => {
   const sorted = players.sort((a, b) => b.score - a.score);
   const top = sorted[0].score;
   return sorted.filter(p => p.score === top);

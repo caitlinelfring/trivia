@@ -13,7 +13,7 @@ import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
-import { cleanUri, getWinners } from "../utils/constants";
+import { cleanUri, getWinners } from "../utils/helpers";
 
 let peer;
 

@@ -4,7 +4,7 @@
 
 import Peer from 'peerjs';
 
-import { errorAlert } from "../utils/constants";
+import { errorAlert } from "../utils/helpers";
 import Player from "./Player";
 
 const noop = () => { };

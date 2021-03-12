@@ -6,7 +6,7 @@ import {
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
-import { getWinners } from "../utils/constants";
+import { getWinners } from "../utils/helpers";
 
 // Global state to avoid reconnect errors when the property is re
 let peer;

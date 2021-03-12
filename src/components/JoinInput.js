@@ -3,7 +3,7 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import { roomIdNumChars } from "../utils/constants";
+import { roomIdNumChars } from "../utils/helpers";
 
 export default function JoinInput(props) {
   const [roomId, setRoomId] = useState("");

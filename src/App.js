@@ -10,7 +10,7 @@ import {
 import Join from "./components/Join";
 import Host from "./components/Host";
 import JoinInput from "./components/JoinInput";
-import { cleanUri, roomIdNumChars } from "./utils/constants";
+import { cleanUri, roomIdNumChars } from "./utils/helpers";
 import { randStringToUpperCase } from "./utils/random";
 
 const addAlertUserListener = () => {
@@ -61,7 +61,6 @@ export default function App() {
   }
 
   return (
-  <>
     <Container fluid="md" className={"pt-4"}>
       <Row>
         <Col>
@@ -74,6 +73,5 @@ export default function App() {
         </Col>
       </Row>
     </Container>
-    </>
   );
 }
