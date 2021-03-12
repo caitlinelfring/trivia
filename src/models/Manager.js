@@ -1,7 +1,7 @@
 import Question from "./Question";
 
 const MID_ROUND_DELAY = 1000;
-const DEFAULT_QUESTIONS = 1;
+const DEFAULT_QUESTIONS = 10;
 
 const sessionToken = (id) => {
   return `dHJpdmlhCg-${id}`;
