@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Spinner,
   Badge,
@@ -18,9 +18,7 @@ function Join(props) {
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
   const [gameComplete, setGameComplete] = useState(null);
-
-  // wow... this is bad, but best reconnect logic i can handle right now
-  if (!peer) {
+  useEffect(() => {
     const onData = (data) => {
       console.log(`got data: ${data}`);
       if (typeof data === "object") {
@@ -37,8 +35,12 @@ function Join(props) {
       }
     };
     const onConnected = () => setConnected(true);
-    peer = new PlayerPeer(roomId, {name, roomId}, onData, onConnected);
-  }
+    // wow... this is bad, but best reconnect logic i can handle right now
+    if (!peer) {
+      peer = new PlayerPeer(roomId, { name, roomId }, onData, onConnected);
+    }
+  }, [name, roomId]);
+
 
   const choiceSelected = (choice) => {
     if (!peer.connections || !peer.connections[roomId]) {

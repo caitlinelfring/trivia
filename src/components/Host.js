@@ -28,27 +28,22 @@ export default function Host(props) {
   useEffect(() => {
     const disconnect = () => {
       if (peer) {
-        peer.disconnect();
+        peer.destroy();
       }
     };
     window.addEventListener("beforeunload", disconnect);
+
+    if (!peer) {
+      const onConnectionOpened = (player) => {
+        setPlayers(prevState => [...prevState, player]);
+        Manager.instance.addPlayer(player);
+      };
+      const onData = (data) => {
+        console.log('Received', data);
+      };
+      peer = new HostPeer(roomId, onData, onConnectionOpened);
+    }
   });
-
-  if (!peer) {
-    const onConnectionOpened = (player) => {
-      setPlayers(prevState => [...prevState, player]);
-      Manager.instance.addPlayer(player);
-    };
-    const onData = (data) => {
-      console.log('Received', data);
-    };
-    peer = new HostPeer(roomId, onData, onConnectionOpened);
-  }
-
-  const start = () => {
-    setStarted(true);
-    Manager.instance.prepareNextRound();
-  };
 
   Manager.instance.onRoundComplete = () => {
     setPrepareRound(Manager.instance.round);
@@ -61,6 +56,11 @@ export default function Host(props) {
   Manager.instance.onGameComplete = () => {
     setGameComplete(true);
     setPrepareRound(null);
+  };
+
+  const start = () => {
+    setStarted(true);
+    Manager.instance.prepareNextRound();
   };
 
   return (
