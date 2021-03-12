@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === "production") {
   };
 }
 
-export function HostPeer(roomId, onData = noop, onConnectionOpened = noop, onConnectionClosed = noop) {
+export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed = noop) {
   const peer = new Peer(roomId, peerConfig);
   peer.on('error', (err) => {
     console.error(err.type);
@@ -51,13 +51,8 @@ export function HostPeer(roomId, onData = noop, onConnectionOpened = noop, onCon
         onConnectionClosed(conn.connectionId);
       });
       conn.on('open', () => {
-        const player = new Player(conn, conn.metadata.name);
-
-        onConnectionOpened(player);
-        conn.on('data', function (data) {
-          console.log('Received', data);
-          onData(data);
-        });
+        console.log(`conn open: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+        onConnectionOpened(new Player(conn, conn.metadata.name));
       });
     });
   });

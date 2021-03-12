@@ -24,9 +24,10 @@ export default function Host(props) {
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
 
-
   Manager.instance.onRoundComplete = () => {
     setPrepareRound(Manager.instance.round);
+    // TODO: update players correctly
+    setPlayers([]);
     setPlayers(Manager.instance.players);
   };
   Manager.instance.onNewQuestion = (q) => {
@@ -37,20 +38,23 @@ export default function Host(props) {
     setGameComplete(true);
     setPrepareRound(null);
   };
+
   useEffect(() => {
+    const onConnectionOpened = (player) => {
+      Manager.instance.addPlayer(player);
+      // TODO: update players correctly
+      setPlayers([]);
+      setPlayers(Manager.instance.players);
+    };
+    const onConnectionClosed = (id) => {
+      Manager.instance.removeId(id);
+      // TODO: update players correctly
+      setPlayers([]);
+      setPlayers(Manager.instance.players);
+    };
+
     if (!peer) {
-      const onConnectionOpened = (player) => {
-        Manager.instance.addPlayer(player);
-        setPlayers(Manager.instance.players);
-      };
-      const onConnectionClosed = (id) => {
-        Manager.instance.removeId(id);
-        setPlayers(Manager.instance.players);
-      };
-      const onData = (data) => {
-        console.log('Received', data);
-      };
-      setPeer(new HostPeer(roomId, onData, onConnectionOpened, onConnectionClosed));
+      setPeer(new HostPeer(roomId, onConnectionOpened, onConnectionClosed));
     }
 
     const disconnect = () => {

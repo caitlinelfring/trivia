@@ -35,7 +35,7 @@ function Join(props) {
   const onConnected = () => setConnected(true);
   useEffect(() => {
     !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected));
-  }, [name, roomId, peer, gameComplete]);
+  }, [name, roomId, peer]);
 
 
   const choiceSelected = (choice) => {
