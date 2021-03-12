@@ -1,7 +1,7 @@
 import Question from "./Question";
 
-const midQuestionPause = 1000;
-const defaultQuestions = 10;
+const MID_ROUND_DELAY = 1000;
+const DEFAULT_QUESTIONS = 1;
 
 const sessionToken = (id) => {
   return `dHJpdmlhCg-${id}`;
@@ -28,13 +28,14 @@ export default class Manager {
     this.round = 0;
     this.questions = [];
     this.currentQuestion = null;
+    this.roomId = null;
     this.onRoundComplete = () => { };
     this.onGameComplete = () => {};
     this.onNewQuestion = () => {};
     this.populateQuestions();
   }
   async populateQuestions() {
-    this.questions = await getQuestions(null, defaultQuestions);
+    this.questions = await getQuestions(this.roomId, DEFAULT_QUESTIONS);
   }
   addPlayer(player) {
     this.players.push(player);
@@ -97,13 +98,13 @@ export default class Manager {
       this.gameComplete();
       return;
     }
-    console.log(this.players);
+
     this.players.forEach(player => {
       player.send({ "prepareForRound": this.round });
     });
     setTimeout(() => {
       this.sendQuestion();
-    }, midQuestionPause);
+    }, MID_ROUND_DELAY);
   }
 
   nextRound() {
