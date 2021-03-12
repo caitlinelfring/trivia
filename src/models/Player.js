@@ -31,6 +31,11 @@ class Player {
       answers: this.answers,
     };
   }
+
+  reset() {
+    this.score = 0;
+    this.answers = {};
+  }
 }
 
 export default Player;

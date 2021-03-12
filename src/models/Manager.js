@@ -114,7 +114,8 @@ export default class Manager {
 
   newGame() {
     this.round = 0;
-    this.players.forEach(p => p.score = 0);
+    this.currentQuestion = null;
+    this.players.forEach(p => p.reset());
     this.populateQuestions();
   }
 }
