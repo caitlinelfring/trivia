@@ -20,8 +20,8 @@ function Join(props) {
     console.log(`got data: ${data}`);
     if (typeof data === "object") {
       if (data.newQuestion) {
-        setQuestion(data.newQuestion);
         setPrepareRound(null);
+        setQuestion(data.newQuestion);
       }
       if (data.prepareForRound) {
         setGameComplete(false);
@@ -35,7 +35,7 @@ function Join(props) {
   const onConnected = () => setConnected(true);
   useEffect(() => {
     !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected));
-  }, [name, roomId, peer]);
+  }, [name, roomId, peer, gameComplete]);
 
 
   const choiceSelected = (choice) => {
@@ -59,7 +59,7 @@ function Join(props) {
         </>
       }
       {(question && !prepareRound && !gameComplete) && <QuestionView question={question} onSelected={choiceSelected} />}
-      {gameComplete && <WinnerView players={gameComplete} />}
+      {(!prepareRound && gameComplete) && <WinnerView players={gameComplete} />}
     </>
   );
 }
