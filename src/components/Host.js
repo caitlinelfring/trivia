@@ -105,7 +105,7 @@ export default function Host(props) {
             <ProgressBar
               className={"mt-5"} animated
               now={Manager.instance.round}
-              label={Manager.instance.round}
+              label={`${Manager.instance.round} / ${Manager.instance.questions.length}`}
               max={Manager.instance.questions.length}
             />
             </div>
