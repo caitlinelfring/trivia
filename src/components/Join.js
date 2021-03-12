@@ -6,10 +6,6 @@ import {
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
-import { getWinners } from "../utils/helpers";
-
-// Global state to avoid reconnect errors when the property is re
-let peer;
 
 function Join(props) {
   const { name, roomId } = props;
@@ -18,28 +14,30 @@ function Join(props) {
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
   const [gameComplete, setGameComplete] = useState(null);
-  useEffect(() => {
-    const onData = (data) => {
-      console.log(`got data: ${data}`);
-      if (typeof data === "object") {
-        if (data.newQuestion) {
-          setQuestion(data.newQuestion);
-          setPrepareRound(null);
-        }
-        if (data.prepareForRound) {
-          setPrepareRound(data.prepareForRound);
-        }
-        if (data.gameComplete) {
-          setGameComplete(data.gameComplete);
-        }
+  const [peer, setPeer] = useState(null);
+
+  const onData = (data) => {
+    console.log(`got data: ${data}`);
+    if (typeof data === "object") {
+      if (data.newQuestion) {
+        setQuestion(data.newQuestion);
+        setPrepareRound(null);
       }
-    };
-    const onConnected = () => setConnected(true);
+      if (data.prepareForRound) {
+        setPrepareRound(data.prepareForRound);
+      }
+      if (data.gameComplete) {
+        setGameComplete(data.gameComplete);
+      }
+    }
+  };
+  const onConnected = () => setConnected(true);
+  useEffect(() => {
     // wow... this is bad, but best reconnect logic i can handle right now
     if (!peer) {
-      peer = new PlayerPeer(roomId, { name, roomId }, onData, onConnected);
+      setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected));
     }
-  }, [name, roomId]);
+  }, [name, roomId, peer]);
 
 
   const choiceSelected = (choice) => {
@@ -54,7 +52,7 @@ function Join(props) {
   return (
     <>{connected ||
       <Spinner animation="border" variant="primary" />}
-      <h4>{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
+      <h4 className="mb-5">{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
       {(!question && connected) && <p>Waiting for host to start the game.</p>}
       {(!!prepareRound && !gameComplete) &&
         <>
@@ -63,7 +61,7 @@ function Join(props) {
         </>
       }
       {(question && !prepareRound && !gameComplete) && <QuestionView question={question} onSelected={choiceSelected} />}
-      {gameComplete && <WinnerView winners={getWinners(gameComplete)} />}
+      {gameComplete && <WinnerView players={gameComplete} />}
     </>
   );
 }

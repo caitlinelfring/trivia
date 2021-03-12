@@ -13,9 +13,7 @@ import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
-import { cleanUri, getWinners } from "../utils/helpers";
-
-let peer;
+import { cleanUri } from "../utils/helpers";
 
 export default function Host(props) {
   const { roomId } = props;
@@ -24,15 +22,9 @@ export default function Host(props) {
   const [gameComplete, setGameComplete] = useState(false);
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
+  const [peer, setPeer] = useState(null);
 
   useEffect(() => {
-    const disconnect = () => {
-      if (peer) {
-        peer.destroy();
-      }
-    };
-    window.addEventListener("beforeunload", disconnect);
-
     if (!peer) {
       const onConnectionOpened = (player) => {
         setPlayers(prevState => [...prevState, player]);
@@ -41,22 +33,34 @@ export default function Host(props) {
       const onData = (data) => {
         console.log('Received', data);
       };
-      peer = new HostPeer(roomId, onData, onConnectionOpened);
+      setPeer(new HostPeer(roomId, onData, onConnectionOpened));
     }
-  });
 
-  Manager.instance.onRoundComplete = () => {
-    setPrepareRound(Manager.instance.round);
-    setPlayers(Manager.instance.players);
-  };
-  Manager.instance.onNewQuestion = (q) => {
-    setPrepareRound(null);
-    setQuestion(q);
-  };
-  Manager.instance.onGameComplete = () => {
-    setGameComplete(true);
-    setPrepareRound(null);
-  };
+    Manager.instance.onRoundComplete = () => {
+      setPrepareRound(Manager.instance.round);
+      setPlayers(Manager.instance.players);
+    };
+    Manager.instance.onNewQuestion = (q) => {
+      setPrepareRound(null);
+      setQuestion(q);
+    };
+    Manager.instance.onGameComplete = () => {
+      setGameComplete(true);
+      setPrepareRound(null);
+    };
+    // const disconnect = () => {
+    //   console.log("Triggered disconnect");
+    //   if (peer) {
+    //     Manager.instance.players = [];
+    //     Manager.instance.onRoundComplete = () => {};
+    //     Manager.instance.onNewQuestion = () => {};
+    //     Manager.instance.onGameComplete = () => {};
+    //     peer.destroy();
+    //   }
+    // };
+    // window.addEventListener("beforeunload", disconnect);
+    // return () => window.removeEventListener("beforeunload", disconnect);
+  }, [roomId, peer]);
 
   const start = () => {
     setStarted(true);
@@ -67,10 +71,12 @@ export default function Host(props) {
     <>
       <Row>
         <Col xs={12} md={8}>
-          <h3>
-            Trivia Game <Badge variant="secondary">{roomId}</Badge>
-          </h3>
-          <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
+          <div className="mb-5">
+            <h3>
+              Trivia Game <Badge variant="secondary">{roomId}</Badge>
+            </h3>
+            <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
+          </div>
           {(players.length > 0 && !started) && <Button variant="primary" onClick={() => start()}>Start</Button>}
           {(!!prepareRound && !gameComplete) &&
             <>
@@ -79,7 +85,7 @@ export default function Host(props) {
             </>
           }
           {(question && !prepareRound && !gameComplete) && (
-            <>
+            <div>
             <QuestionView question={question} isHost={true} />
             <ProgressBar
               className={"mt-5"} animated
@@ -87,9 +93,9 @@ export default function Host(props) {
               label={Manager.instance.round}
               max={Manager.instance.questions.length}
             />
-            </>
+            </div>
           )}
-          {gameComplete && <WinnerView winners={getWinners(players)} />}
+          {gameComplete && <WinnerView players={players} />}
         </Col>
         <Col xs={12} md={4}>
           <div className="pt-2">

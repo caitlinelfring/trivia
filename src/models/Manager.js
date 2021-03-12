@@ -57,6 +57,7 @@ export default class Manager {
       return;
     }
     const q = this.questions[this.round-1];
+    console.log(`Question: ${q.question}, answer: ${q._correct}`);
     this.players.forEach(player => {
       const onData = (d) => {
         console.log(`got message from player ${player.name}. Correct? ${q.isCorrect(d.answer)}`);
