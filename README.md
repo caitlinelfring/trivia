@@ -15,6 +15,22 @@ There are no guarantees around this project. I am not a React developer, and the
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT) - see the [`LICENSE`](./LICENSE) file for details.
 
+## Run locally
+
+```bash
+
+npm install
+
+npm start
+```
+and access via `http://localhost:3000`
+
+**To run a local PeerServer**
+
+```bash
+docker run -p 9000:9000 -d peerjs/peerjs-server
+```
+
 ## TODO
 
 * [ ] Stylize winner page
@@ -22,5 +38,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 * [ ] Show answers afer each round
 * [ ] Show player submitted status for round
 * [ ] Toast when new user joins
-* [ ] Avatars / colors?
+* [ ] Avatars / colors
+* [ ] Round timer
+* [ ] Category choices
 * [ ] Use bootstrap alert instead of `alert("error")`
