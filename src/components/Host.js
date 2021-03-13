@@ -111,7 +111,7 @@ export default function Host(props) {
             </div>
           )}
           {(started && gameComplete) && <>
-            <WinnerView players={players} />
+            <WinnerView players={players} isHost={true} questions={Manager.instance.questions} />
             <Button variant="primary" onClick={() => newGame()}>New Game</Button>
           </>}
         </Col>
