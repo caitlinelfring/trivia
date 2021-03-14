@@ -18,6 +18,12 @@ export default function WinnerView(props) {
   const winnerOne = winners[0];
   const numWinners = winners.length;
 
+  const correctPlayersForQuestion = i => {
+    console.log(i);
+    console.log(players);
+    return players.filter(p => p.answers[i].correct).map(p => p.name).join(", ");
+  };
+
   let answers;
   if (isHost && questions.length > 0) {
     answers = (
@@ -36,7 +42,7 @@ export default function WinnerView(props) {
               <td>{i+1}</td>
               <td>{q.question}</td>
               <td>{q._correct}</td>
-              <td>{players.filter(p => p.answers[i+1].correct).map(p => p.name).join(", ")}</td>
+              <td>{correctPlayersForQuestion(i+1)}</td>
             </tr>
           ))}
         </tbody>

@@ -108,15 +108,17 @@ export default function Host(props) {
             <div>
             <QuestionView question={question} isHost={true} />
             <ProgressBar
-              className={"mt-5"} animated
+              className={"mt-5"}
+              style={{height: "1.75rem"}}
+              animated
               now={Manager.instance.round}
-              label={`${Manager.instance.round} / ${Manager.instance.questions.length}`}
-              max={Manager.instance.questions.length}
+              label={`${Manager.instance.round} / ${Manager.instance.questions().length}`}
+              max={Manager.instance.questions().length}
             />
             </div>
           )}
           {(started && gameComplete) && <>
-            <WinnerView players={players} isHost={true} questions={Manager.instance.questions} />
+            <WinnerView players={players} isHost={true} questions={Manager.instance.questions()} />
             <Button variant="primary" onClick={() => newGame()}>New Game</Button>
             <LeaveButton />
           </>}
