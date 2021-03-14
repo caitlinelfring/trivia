@@ -42,19 +42,21 @@ export default function Host(props) {
 
   useEffect(() => {
     const onConnectionOpened = (player) => {
+      console.log(`connection closed: ${player.connectionId}`);
       Manager.instance.addPlayer(player);
       // TODO: update players correctly
       setPlayers([]);
       setPlayers(Manager.instance.players);
     };
     const onConnectionClosed = (id) => {
+      console.log(`connection closed: ${id}`);
       Manager.instance.removeId(id);
       // TODO: update players correctly
       setPlayers([]);
       setPlayers(Manager.instance.players);
     };
 
-    if (!peer) {
+    if (!peer || peer.id !== roomId) {
       setPeer(new HostPeer(roomId, onConnectionOpened, onConnectionClosed));
     }
 
