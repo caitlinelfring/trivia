@@ -3,8 +3,6 @@ import QuestionManager from "./QuestionManager";
 const MID_ROUND_DELAY = 1000;
 
 export default class Manager {
-  static instance = Manager.instance == null ? new Manager() : Manager.instance;
-
   constructor() {
     this.players = [];
     this.round = 0;

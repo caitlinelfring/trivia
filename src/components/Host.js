@@ -16,9 +16,11 @@ import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
 import { cleanUri } from "../utils/helpers";
 
+const manager = new Manager();
+
 export default function Host(props) {
   const { roomId } = props;
-  Manager.instance.roomId = roomId;
+  manager.roomId = roomId;
   const [players, setPlayers] = useState([]);
   const [started, setStarted] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
@@ -26,17 +28,17 @@ export default function Host(props) {
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
 
-  Manager.instance.onRoundComplete = () => {
-    setPrepareRound(Manager.instance.round);
+  manager.onRoundComplete = () => {
+    setPrepareRound(manager.round);
     // TODO: update players correctly
     setPlayers([]);
-    setPlayers(Manager.instance.players);
+    setPlayers(manager.players);
   };
-  Manager.instance.onNewQuestion = (q) => {
+  manager.onNewQuestion = (q) => {
     setPrepareRound(null);
     setQuestion(q);
   };
-  Manager.instance.onGameComplete = () => {
+  manager.onGameComplete = () => {
     setGameComplete(true);
     setPrepareRound(null);
   };
@@ -44,17 +46,17 @@ export default function Host(props) {
   useEffect(() => {
     const onConnectionOpened = (player) => {
       console.log(`connection closed: ${player.connectionId}`);
-      Manager.instance.addPlayer(player);
+      manager.addPlayer(player);
       // TODO: update players correctly
       setPlayers([]);
-      setPlayers(Manager.instance.players);
+      setPlayers(manager.players);
     };
     const onConnectionClosed = (id) => {
       console.log(`connection closed: ${id}`);
-      Manager.instance.removeId(id);
+      manager.removeId(id);
       // TODO: update players correctly
       setPlayers([]);
-      setPlayers(Manager.instance.players);
+      setPlayers(manager.players);
     };
 
     if (!peer || peer.id !== roomId) {
@@ -64,10 +66,10 @@ export default function Host(props) {
     const disconnect = () => {
       console.log("Triggered disconnect");
       if (peer) {
-        Manager.instance.players = [];
-        Manager.instance.onRoundComplete = () => {};
-        Manager.instance.onNewQuestion = () => {};
-        Manager.instance.onGameComplete = () => {};
+        manager.players = [];
+        manager.onRoundComplete = () => {};
+        manager.onNewQuestion = () => {};
+        manager.onGameComplete = () => {};
         peer.disconnect();
       }
     };
@@ -77,11 +79,11 @@ export default function Host(props) {
 
   const start = () => {
     setStarted(true);
-    Manager.instance.prepareNextRound();
+    manager.prepareNextRound();
   };
 
   function newGame() {
-    Manager.instance.newGame();
+    manager.newGame();
     setGameComplete(false);
     start();
   }
@@ -111,14 +113,14 @@ export default function Host(props) {
               className={"mt-5"}
               style={{height: "1.75rem"}}
               animated
-              now={Manager.instance.round}
-              label={`${Manager.instance.round} / ${Manager.instance.questions().length}`}
-              max={Manager.instance.questions().length}
+              now={manager.round}
+              label={`${manager.round} / ${manager.questions().length}`}
+              max={manager.questions().length}
             />
             </div>
           )}
           {(started && gameComplete) && <>
-            <WinnerView players={players} isHost={true} questions={Manager.instance.questions()} />
+            <WinnerView players={players} isHost={true} questions={manager.questions()} />
             <Button variant="primary" onClick={() => newGame()}>New Game</Button>
             <LeaveButton />
           </>}
