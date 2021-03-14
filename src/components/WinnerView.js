@@ -13,13 +13,13 @@ const getWinners = (players) => {
 
 export default function WinnerView(props) {
   const { players, isHost = false, questions = [] } = props;
-  if (!players) { return; }
+  if (!players || players.length === 0) { return null; }
   const winners = getWinners(players);
   const winnerOne = winners[0];
   const numWinners = winners.length;
 
   let answers;
-  if (isHost && questions.length > 0 && players.length > 0) {
+  if (isHost && questions.length > 0) {
     answers = (
       <Table striped bordered hover>
         <thead>
