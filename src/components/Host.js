@@ -17,6 +17,7 @@ import { cleanUri } from "../utils/helpers";
 
 export default function Host(props) {
   const { roomId } = props;
+  Manager.instance.roomId = roomId;
   const [players, setPlayers] = useState([]);
   const [started, setStarted] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
