@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   Spinner,
   Badge,
-  Button,
 } from "react-bootstrap";
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
+import LeaveButton from "./LeaveButton";
 
 function Join(props) {
   const { name, roomId } = props;
@@ -53,13 +53,7 @@ function Join(props) {
       {connected || <Spinner animation="border" variant="primary" />}
       <h4 className="mb-5">{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
       {(!question && connected && !prepareRound) && <p>Waiting for host to start the game.</p>}
-      {(!question && !prepareRound) && <Button
-          variant="danger"
-          onClick={() => {
-            sessionStorage.clear();
-            window.location.reload(true);
-          }}
-        >Leave</Button>
+      {(!question && !prepareRound) && <LeaveButton />
       }
       {(!!prepareRound && !gameComplete) &&
         <>

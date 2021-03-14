@@ -11,6 +11,7 @@ import {
 import Scoreboard from "./Scoreboard";
 import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
+import LeaveButton from "./LeaveButton";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
 import { cleanUri } from "../utils/helpers";
@@ -96,6 +97,7 @@ export default function Host(props) {
             <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
           </div>
           {(players.length > 0 && !started) && <Button variant="primary" onClick={() => start()}>Start</Button>}
+          {!started &&<LeaveButton />}
           {(!!prepareRound && !gameComplete) &&
             <>
               <Spinner animation="border" variant="primary" />
@@ -116,6 +118,7 @@ export default function Host(props) {
           {(started && gameComplete) && <>
             <WinnerView players={players} isHost={true} questions={Manager.instance.questions} />
             <Button variant="primary" onClick={() => newGame()}>New Game</Button>
+            <LeaveButton />
           </>}
         </Col>
         <Col xs={12} md={4}>
