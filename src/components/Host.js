@@ -68,7 +68,7 @@ export default function Host(props) {
         Manager.instance.onRoundComplete = () => {};
         Manager.instance.onNewQuestion = () => {};
         Manager.instance.onGameComplete = () => {};
-        peer.destroy();
+        peer.disconnect();
       }
     };
     window.addEventListener("beforeunload", disconnect);

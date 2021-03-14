@@ -59,26 +59,35 @@ export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed =
   return peer;
 }
 
+
+
 export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = noop, onClose = noop) {
   // hacky re-connect logic when the host disconnects
+  let conn;
   const newConnection = (p) => {
-    let conn;
+    let retryTimeout;
     conn = p.connect(roomId, { metadata });
     conn.on('open', function () {
       console.log(`open connection, connected: ${conn.open}`);
+      clearTimeout(retryTimeout);
       onConnected();
 
       conn.on('data', function (data) {
         console.log('Received', data);
         onData(data);
       });
+
       conn.on('close', () => {
         console.log("connection closed");
-        conn = newConnection(p);
+        newConnection(p);
         onClose();
       });
     });
-    return conn;
+
+    retryTimeout = setTimeout(() => {
+      clearTimeout(retryTimeout);
+      (conn && !conn.open) && newConnection(p);
+    }, 2*1000); // TODO: expontential backoff
   };
 
   const peer = new Peer(peerConfig);
