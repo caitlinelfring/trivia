@@ -30,8 +30,9 @@ export default function JoinInput(props) {
     }
     console.log(`Submitting name: ${name}, roomId: ${roomId}`);
     if (props.onSubmit) {
-      props.onSubmit({roomId: roomId, name: name});
+      props.onSubmit({roomId, name});
     }
+    sessionStorage.setItem("roomInfo", JSON.stringify({ roomId, name }));
   };
   return (
     <Form onSubmit={handleSubmit}>

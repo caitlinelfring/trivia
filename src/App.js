@@ -48,6 +48,17 @@ export default function App() {
   const [host, setHost] = useState(false);
   const [playerState, setPlayerState] = useState({roomId: "", name: ""});
 
+  const join = (input) => {
+    setIsPlayer(true);
+    setPlayerState(input);
+  };
+  useEffect(() => {
+    const infoFromStorage = JSON.parse(sessionStorage.getItem("roomInfo"));
+    if (infoFromStorage) {
+      join(infoFromStorage);
+    }
+  }, []);
+
   let ui;
   if (isPlayer) {
     stopSleep();
@@ -65,10 +76,7 @@ export default function App() {
       <h4>Want to host a Trivia game? Start one now!</h4>
       <Button size="lg" variant="primary" onClick={() => setHost(true)}>Start</Button>
       <h4 className="pt-5">Or join a game someone's hosting</h4>
-      <JoinInput onSubmit={(input) => {
-        setIsPlayer(true);
-        setPlayerState(input);
-      }} />
+      <JoinInput onSubmit={join} />
     </>;
   }
 
