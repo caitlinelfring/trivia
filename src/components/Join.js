@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Spinner,
   Badge,
+  Button,
 } from "react-bootstrap";
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
@@ -48,10 +49,18 @@ function Join(props) {
   };
 
   return (
-    <>{connected ||
-      <Spinner animation="border" variant="primary" />}
+    <>
+      {connected || <Spinner animation="border" variant="primary" />}
       <h4 className="mb-5">{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
-      {(!question && connected) && <p>Waiting for host to start the game.</p>}
+      {(!question && connected && !prepareRound) && <p>Waiting for host to start the game.</p>}
+      {(!question && !prepareRound) && <Button
+          variant="danger"
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.reload(true);
+          }}
+        >Leave</Button>
+      }
       {(!!prepareRound && !gameComplete) &&
         <>
           <Spinner animation="border" variant="primary" />
