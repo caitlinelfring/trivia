@@ -7,6 +7,8 @@ import {
   Col,
 } from 'react-bootstrap';
 
+import NoSleep from 'nosleep.js';
+
 import Join from "./components/Join";
 import Host from "./components/Host";
 import JoinInput from "./components/JoinInput";
@@ -26,6 +28,15 @@ const addAlertUserListener = () => {
   }
 };
 
+const stopSleep = () => {
+  // Stop the screen from going to sleep
+  const noSleep = new NoSleep();
+  document.addEventListener('click', function enableNoSleep() {
+    document.removeEventListener('click', enableNoSleep, false);
+    noSleep.enable();
+  }, false);
+};
+
 export default function App() {
   // Clean the url in the browser bar.
   // This might need to go away if I ever want to auto-join from a fragment in the url
@@ -38,12 +49,13 @@ export default function App() {
   const [playerState, setPlayerState] = useState({roomId: "", name: ""});
 
   let ui;
-
   if (isPlayer) {
+    stopSleep();
     ui = <>
       <Join {...playerState}/>
     </>;
   } else if (host) {
+    stopSleep();
     const roomId = randStringToUpperCase(roomIdNumChars);
     ui = <>
       <Host roomId={roomId}/>
@@ -65,7 +77,6 @@ export default function App() {
       <Row>
         <Col>
           <Card className="text-center">
-            {/* <Card.Header>Trivia Night</Card.Header> */}
             <Card.Body>
               {ui}
             </Card.Body>
