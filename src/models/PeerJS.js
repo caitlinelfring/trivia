@@ -13,7 +13,7 @@ let peerConfig = {
   host: 'localhost',
   port: 9000,
   path: '/myapp',
-  debug: 3,
+  // debug: 3,
 };
 if (process.env.NODE_ENV === "production") {
   // TODO: host my own
@@ -39,17 +39,21 @@ export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed =
     console.error(err.type);
     errorAlert(err);
   });
+
   peer.on('open', function (id) {
     console.log('My peer ID is: ' + id);
     peer.on('connection', (conn) => {
       console.log(`peer connected: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
+
       conn.on('destroy', () => {
         console.log(`conn destroyed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
       });
+
       conn.on('close', () => {
         console.log(`conn closed: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
         onConnectionClosed(conn.connectionId);
       });
+
       conn.on('open', () => {
         console.log(`conn open: ${conn.peer} ${JSON.stringify(conn.metadata)}`);
         onConnectionOpened(new Player(conn, conn.metadata.name));
@@ -59,14 +63,14 @@ export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed =
   return peer;
 }
 
-
-
 export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = noop, onClose = noop) {
   // hacky re-connect logic when the host disconnects
   let conn;
   const newConnection = (p) => {
     let retryTimeout;
+
     conn = p.connect(roomId, { metadata });
+
     conn.on('open', function () {
       console.log(`open connection, connected: ${conn.open}`);
       clearTimeout(retryTimeout);

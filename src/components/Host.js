@@ -15,6 +15,7 @@ import LeaveButton from "./LeaveButton";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
 import { cleanUri } from "../utils/helpers";
+import { CategoryDropDown } from "./CategoryDropdown";
 
 const manager = new Manager();
 
@@ -27,6 +28,7 @@ export default function Host(props) {
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
+  const [category, setCategory] = useState(0);
 
   manager.onRoundComplete = () => {
     setPrepareRound(manager.round);
@@ -66,10 +68,7 @@ export default function Host(props) {
     const disconnect = () => {
       console.log("Triggered disconnect");
       if (peer) {
-        manager.players = [];
-        manager.onRoundComplete = () => {};
-        manager.onNewQuestion = () => {};
-        manager.onGameComplete = () => {};
+        manager.reset();
         peer.disconnect();
       }
     };
@@ -77,60 +76,72 @@ export default function Host(props) {
     return () => window.removeEventListener("beforeunload", disconnect);
   }, [roomId, peer]);
 
-  const start = () => {
-    setStarted(true);
-    manager.prepareNextRound();
-  };
+  useEffect(() => {
+    if (manager.questionManager) {
+      manager.questionManager.selectedCategory = category;
+    }
+  }, [category]);
 
-  function newGame() {
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      await manager.questionManager.populateQuestions();
+      manager.prepareNextRound();
+    };
+    started && fetchQuestions();
+  }, [started]);
+
+  const newGame = () => {
     manager.newGame();
     setGameComplete(false);
-    start();
-  }
+    setStarted(true);
+  };
 
   return (
-    <>
-      <Row>
-        <Col xs={12} md={8}>
-          <div className="mb-5">
-            <h3>
-              Trivia Game <Badge variant="secondary">{roomId}</Badge>
-            </h3>
-            <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
+    <Row>
+      <Col xs={12} md={8}>
+        <div className="mb-5">
+          <h3>
+            Trivia Game <Badge variant="secondary">{roomId}</Badge>
+          </h3>
+          <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
+        </div>
+        {(players.length > 0 && !started) && (
+        <>
+          <Button variant="primary" onClick={() => setStarted(true)}>Start</Button>
+          <CategoryDropDown categories={manager.questionManager.categories} onSelect={setCategory} />
+          </>
+        )}
+        {!started &&<LeaveButton />}
+        {(!!prepareRound && !gameComplete) &&
+          <>
+            <Spinner animation="border" variant="primary" />
+            <h5>Prepare for round {prepareRound}</h5>
+          </>
+        }
+        {(question && !prepareRound && !gameComplete) && (
+          <div>
+          <QuestionView question={question} isHost={true} />
+          <ProgressBar
+            className={"mt-5"}
+            style={{height: "1.75rem"}}
+            animated
+            now={manager.round}
+            label={`${manager.round} / ${manager.questions().length}`}
+            max={manager.questions().length}
+          />
           </div>
-          {(players.length > 0 && !started) && <Button variant="primary" onClick={() => start()}>Start</Button>}
-          {!started &&<LeaveButton />}
-          {(!!prepareRound && !gameComplete) &&
-            <>
-              <Spinner animation="border" variant="primary" />
-              <h5>Prepare for round {prepareRound}</h5>
-            </>
-          }
-          {(question && !prepareRound && !gameComplete) && (
-            <div>
-            <QuestionView question={question} isHost={true} />
-            <ProgressBar
-              className={"mt-5"}
-              style={{height: "1.75rem"}}
-              animated
-              now={manager.round}
-              label={`${manager.round} / ${manager.questions().length}`}
-              max={manager.questions().length}
-            />
-            </div>
-          )}
-          {(started && gameComplete) && <>
-            <WinnerView players={players} isHost={true} questions={manager.questions()} />
-            <Button variant="primary" onClick={() => newGame()}>New Game</Button>
-            <LeaveButton />
-          </>}
-        </Col>
-        <Col xs={12} md={4}>
-          <div className="pt-2">
-            {players.length > 0 ? <Scoreboard players={players} round={prepareRound} /> : <h5>Waiting for Players...</h5>}
-          </div>
-        </Col>
-      </Row>
-    </>
+        )}
+        {(started && gameComplete) && <>
+          <WinnerView players={players} isHost={true} questions={manager.questions()} />
+          <Button variant="primary" onClick={() => newGame()}>New Game</Button>
+          <LeaveButton />
+        </>}
+      </Col>
+      <Col xs={12} md={4}>
+        <div className="pt-2">
+          {players.length > 0 ? <Scoreboard players={players} round={prepareRound} /> : <h5>Waiting for Players...</h5>}
+        </div>
+      </Col>
+    </Row>
   );
 }

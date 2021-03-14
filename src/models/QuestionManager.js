@@ -5,15 +5,16 @@ const DEFAULT_QUESTIONS = 10;
 export default class QuestionManager {
   constructor() {
     this.questions = [];
+    this.categories = {};
     this.current = null;
     this.sessionToken = null;
-    this.populateQuestions();
+    this.selectedCategory = null;
+    this.populateCategories();
   }
 
   reset() {
     this.questions = [];
     this.current = null;
-    this.populateQuestions();
   }
 
   setCurrent(i) {
@@ -24,8 +25,12 @@ export default class QuestionManager {
     if (!this.sessionToken) {
       this.sessionToken = await this.getSessionToken();
     }
-    this.questions = await this.getQuestions(this.sessionToken, DEFAULT_QUESTIONS);
-    console.log(this.questions);
+    this.questions = await this.getQuestions(this.selectedCategory, this.sessionToken, DEFAULT_QUESTIONS);
+    console.log(`got questions: ${JSON.stringify(this.questions)}`);
+  }
+
+  async populateCategories() {
+    this.categories = await this.getCategories();
   }
 
   async apiRequest(params = {}, endpoint = "api.php") {
@@ -39,14 +44,23 @@ export default class QuestionManager {
     return response.token;
   }
 
-  async getQuestions(token = null, num = 1) {
+  async getQuestions(category = null, token = null, num = 1) {
     const query = { "amount": num, "encode": "url3986", "type": "multiple" };
 
     if (token) {
       query["token"] = token;
     }
 
+    if (category) {
+      query["category"] = category;
+    }
+
     const response = await this.apiRequest(query);
     return response.results.map(d => new Question(d));
+  }
+
+  async getCategories() {
+    const response = await this.apiRequest({}, "api_category.php");
+    return response.trivia_categories; //.reduce((a, x) => ({ ...a, [x.id]: x.name }), {0: "All"});
   }
 }

@@ -4,12 +4,16 @@ const MID_ROUND_DELAY = 1000;
 
 export default class Manager {
   constructor() {
+    this.reset();
+  }
+
+  reset() {
     this.players = [];
     this.round = 0;
     this.questionManager = new QuestionManager();
     this.onRoundComplete = () => { };
-    this.onGameComplete = () => {};
-    this.onNewQuestion = () => {};
+    this.onGameComplete = () => { };
+    this.onNewQuestion = () => { };
   }
 
   addPlayer(player) {
@@ -18,17 +22,16 @@ export default class Manager {
       this.sendQuestion();
     }
   }
+
   questions() {
     return this.questionManager.questions;
   }
 
   removeId(id) {
-    const ndx = this.players.findIndex(p => p.connectionId === id);
-    console.log(`idx: ${ndx}`);
-    if (ndx !== -1) {
-      this.players.splice(ndx, 1);
+    const idx = this.players.findIndex(p => p.connectionId === id);
+    if (idx !== -1) {
+      this.players.splice(idx, 1);
     }
-    console.log(this.players);
   }
 
   checkRoundDone() {

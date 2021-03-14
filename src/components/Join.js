@@ -34,8 +34,14 @@ function Join(props) {
     }
   };
   const onConnected = () => setConnected(true);
+  const onClose = () => {
+    console.log("onClose");
+    setConnected(false);
+    setPrepareRound(null);
+    setQuestion(null);
+  };
   useEffect(() => {
-    !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected));
+    !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected, onClose));
   }, [name, roomId, peer]);
 
 
