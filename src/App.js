@@ -59,6 +59,12 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (sessionStorage.getItem("host_room_id")) {
+      setHost(true);
+    }
+  }, []);
+
   let ui;
   if (isPlayer) {
     stopSleep();
@@ -67,7 +73,9 @@ export default function App() {
     </>;
   } else if (host) {
     stopSleep();
-    const roomId = randStringToUpperCase(roomIdNumChars);
+    const roomId = sessionStorage.getItem("host_room_id") || randStringToUpperCase(roomIdNumChars);
+    sessionStorage.setItem("host_room_id", roomId);
+
     ui = <>
       <Host roomId={roomId}/>
     </>;
