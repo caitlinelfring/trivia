@@ -3,7 +3,6 @@ import Select from 'react-select';
 export const CategoryDropDown = ({categories = [], onSelect = () => {}}) => {
   const handleChange = selectedOption => {
     const selected = categories.filter(c => c.id === selectedOption.value)[0];
-    console.log(`Category option selected: ${selected}`);
     onSelect(selected.id || 0);
   };
 

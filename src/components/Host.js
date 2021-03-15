@@ -12,6 +12,7 @@ import Scoreboard from "./Scoreboard";
 import WinnerView from "./WinnerView";
 import { HostPeer } from "../models/PeerJS";
 import LeaveButton from "./LeaveButton";
+import StartButton from "./StartButton";
 import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
 import { cleanUri } from "../utils/helpers";
@@ -87,7 +88,6 @@ export default function Host(props) {
     manager.questionManager.populateCategories().then(() => {
       setCategories(manager.questionManager.categories);
     });
-
   }, []);
 
   useEffect(() => {
@@ -116,7 +116,7 @@ export default function Host(props) {
         {(!started) && (
           <>
             <CategoryDropDown categories={categories} onSelect={setCategory} />
-            <Button variant="primary" onClick={() => setStarted(true)}>Start</Button>
+            <StartButton isLoading={players.length === 0} onClick={() => setStarted(true)} />
             <LeaveButton />
           </>
         )}
