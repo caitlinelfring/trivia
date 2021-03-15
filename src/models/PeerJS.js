@@ -94,8 +94,9 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
     }, 2*1000); // TODO: expontential backoff
   };
 
-  const peer = new Peer(peerConfig);
+  const peer = new Peer(sessionStorage.getItem("peer_id"), peerConfig);
   peer.on('error', (err) => {
+    sessionStorage.removeItem("peer_id");
     errorAlert(err);
   });
 
@@ -105,6 +106,7 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
 
   peer.on('open', function (id) {
     console.log('My peer ID is: ' + id);
+    sessionStorage.setItem("peer_id", id);
     newConnection(peer);
   });
   return peer;
