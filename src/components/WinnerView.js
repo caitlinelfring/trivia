@@ -11,16 +11,13 @@ const getWinners = (players) => {
   return sorted.filter(p => p.score === top);
 };
 
-export default function WinnerView(props) {
-  const { players, isHost = false, questions = [] } = props;
+const WinnerView = ({ players, isHost = false, questions = [] }) => {
   if (!players || players.length === 0) { return null; }
   const winners = getWinners(players);
   const winnerOne = winners[0];
   const numWinners = winners.length;
 
   const correctPlayersForQuestion = i => {
-    console.log(i);
-    console.log(players);
     return players.filter(p => p.answers[i].correct).map(p => p.name).join(", ");
   };
 
@@ -52,16 +49,23 @@ export default function WinnerView(props) {
 
   if (winnerOne.score === 0) {
     return (
-    <>
-    <Alert variant="warning"><FontAwesomeIcon icon={faSadTear} /><br />No one got any questions right.</Alert>
-    {answers}
-    </>);
+      <>
+        <Alert variant="warning">
+          <FontAwesomeIcon icon={faSadTear} />
+          <br />
+          No one got any questions right.
+        </Alert>
+        {answers}
+      </>
+    );
   }
   if (numWinners === 1) {
     return (
       <>
-    <h1><strong>{winnerOne.name}</strong> won with <code>{winnerOne.score}</code> correct answers</h1>
-      { answers }
+        <h1>
+          <strong>{winnerOne.name}</strong> won with <code>{winnerOne.score}</code> correct answers
+        </h1>
+        { answers }
       </>
     );
   } else {
@@ -73,4 +77,6 @@ export default function WinnerView(props) {
       </>
     );
   }
-}
+};
+
+export default WinnerView;
