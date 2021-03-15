@@ -30,6 +30,7 @@ export default function Host(props) {
   const [peer, setPeer] = useState(null);
   const [category, setCategory] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [winners, setWinners] = useState(null);
 
   manager.onRoundComplete = () => {
     setPrepareRound(manager.round);
@@ -45,6 +46,12 @@ export default function Host(props) {
     setGameComplete(true);
     setPrepareRound(null);
   };
+
+  // FIXME: is there a better way to ensure WinnerView is only rendered once when the round completes?
+  useEffect(() => {
+    setWinners(gameComplete ? <WinnerView players={players} isHost={true} questions={manager.questions()} /> : null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameComplete]);
 
   useEffect(() => {
     const onConnectionOpened = (player) => {
@@ -140,7 +147,7 @@ export default function Host(props) {
           </div>
         )}
         {(started && gameComplete) && <>
-          <WinnerView players={players} isHost={true} questions={manager.questions()} />
+          {winners}
           <StartButton onClick={() => newGame()} text={"New Game"} isLoading={false} />
           <LeaveButton />
         </>}

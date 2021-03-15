@@ -18,7 +18,14 @@ const WinnerView = ({ players, isHost = false, questions = [] }) => {
   const numWinners = winners.length;
 
   const correctPlayersForQuestion = i => {
-    return players.filter(p => p.answers[i].correct).map(p => p.name).join(", ");
+    return players.filter(p => {
+      const answer = p.answers[i];
+      if (!!answer) {
+        return answer.correct;
+      } else {
+        return false;
+      }
+    }).map(p => p.name).join(", ");
   };
 
   let answers;
