@@ -5,11 +5,10 @@ const DEFAULT_QUESTIONS = 10;
 export default class QuestionManager {
   constructor() {
     this.questions = [];
-    this.categories = {};
+    this.categories = [];
     this.current = null;
     this.sessionToken = null;
     this.selectedCategory = null;
-    this.populateCategories();
   }
 
   reset() {

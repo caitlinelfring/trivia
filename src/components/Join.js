@@ -18,7 +18,6 @@ function Join(props) {
   const [peer, setPeer] = useState(null);
 
   const onData = (data) => {
-    console.log(`got data: ${data}`);
     if (typeof data === "object") {
       if (data.newQuestion) {
         setPrepareRound(null);

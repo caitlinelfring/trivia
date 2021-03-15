@@ -29,6 +29,7 @@ export default function Host(props) {
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
   const [category, setCategory] = useState(0);
+  const [categories, setCategories] = useState([]);
 
   manager.onRoundComplete = () => {
     setPrepareRound(manager.round);
@@ -83,6 +84,13 @@ export default function Host(props) {
   }, [category]);
 
   useEffect(() => {
+    manager.questionManager.populateCategories().then(() => {
+      setCategories(manager.questionManager.categories);
+    });
+
+  }, []);
+
+  useEffect(() => {
     const fetchQuestions = async () => {
       await manager.questionManager.populateQuestions();
       manager.prepareNextRound();
@@ -105,13 +113,13 @@ export default function Host(props) {
           </h3>
           <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
         </div>
-        {(players.length > 0 && !started) && (
-        <>
-          <Button variant="primary" onClick={() => setStarted(true)}>Start</Button>
-          <CategoryDropDown categories={manager.questionManager.categories} onSelect={setCategory} />
+        {(!started) && (
+          <>
+            <CategoryDropDown categories={categories} onSelect={setCategory} />
+            <Button variant="primary" onClick={() => setStarted(true)}>Start</Button>
+            <LeaveButton />
           </>
         )}
-        {!started &&<LeaveButton />}
         {(!!prepareRound && !gameComplete) &&
           <>
             <Spinner animation="border" variant="primary" />
