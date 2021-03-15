@@ -36,6 +36,8 @@ docker run -p 9000:9000 -d peerjs/peerjs-server
 * [ ] Stylize winner page
 * [ ] Give next button to host
 * [ ] Show answers afer each round
+* [ ] Require unique names
+* [ ] Player doesn't lose points if refreshing mid-game
 * [ ] Show player submitted status for round
 * [ ] Toast when new user joins
 * [ ] Avatars / colors
