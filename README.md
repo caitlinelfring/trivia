@@ -40,5 +40,4 @@ docker run -p 9000:9000 -d peerjs/peerjs-server
 * [ ] Toast when new user joins
 * [ ] Avatars / colors
 * [ ] Round timer
-* [ ] Category choices
 * [ ] Use bootstrap alert instead of `alert("error")`

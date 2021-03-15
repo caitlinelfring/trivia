@@ -11,9 +11,10 @@ export default class QuestionManager {
     this.selectedCategory = null;
   }
 
-  reset() {
+  async reset() {
     this.questions = [];
     this.current = null;
+    await this.populateQuestions();
   }
 
   setCurrent(i) {

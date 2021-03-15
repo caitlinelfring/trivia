@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Badge,
-  Button,
   Row,
   Col,
   Spinner,
@@ -91,17 +90,18 @@ export default function Host(props) {
   }, []);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      await manager.questionManager.populateQuestions();
+    started && manager.questionManager.populateQuestions().then(() => {
       manager.prepareNextRound();
-    };
-    started && fetchQuestions();
+    });
   }, [started]);
 
   const newGame = () => {
-    manager.newGame();
-    setGameComplete(false);
-    setStarted(true);
+    console.log("new game");
+    manager.newGame().then(() => {
+      setGameComplete(false);
+      setStarted(true);
+      manager.prepareNextRound();
+    });
   };
 
   return (
@@ -141,7 +141,7 @@ export default function Host(props) {
         )}
         {(started && gameComplete) && <>
           <WinnerView players={players} isHost={true} questions={manager.questions()} />
-          <Button variant="primary" onClick={() => newGame()}>New Game</Button>
+          <StartButton onClick={() => newGame()} text={"New Game"} isLoading={false} />
           <LeaveButton />
         </>}
       </Col>

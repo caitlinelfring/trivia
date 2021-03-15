@@ -38,11 +38,11 @@ function Join(props) {
     setConnected(false);
     setPrepareRound(null);
     setQuestion(null);
+    setGameComplete(false);
   };
   useEffect(() => {
     !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected, onClose));
   }, [name, roomId, peer]);
-
 
   const choiceSelected = (choice) => {
     if (!peer.connections || !peer.connections[roomId]) {

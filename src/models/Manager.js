@@ -94,8 +94,8 @@ export default class Manager {
     this.onRoundComplete();
   }
 
-  newGame() {
-    this.questionManager.reset();
+  async newGame() {
+    await this.questionManager.reset();
     this.round = 0;
     this.players.forEach(p => p.reset());
   }
