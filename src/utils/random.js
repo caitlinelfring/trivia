@@ -5,3 +5,5 @@ export function randString(num) {
 export function randStringToUpperCase(num) {
   return randString(num).toUpperCase();
 }
+
+export const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
