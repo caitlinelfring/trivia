@@ -154,7 +154,7 @@ export default function Host(props) {
       </Col>
       <Col xs={12} md={4}>
         <div className="pt-2">
-          {players.length > 0 ? <Scoreboard players={players} round={prepareRound} /> : <h5>Waiting for Players...</h5>}
+          {players.length > 0 && <Scoreboard players={players} round={prepareRound} />}
         </div>
       </Col>
     </Row>
