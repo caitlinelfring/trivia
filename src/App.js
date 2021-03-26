@@ -6,6 +6,7 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
+import { useSelector } from "react-redux";
 
 import NoSleep from 'nosleep.js';
 
@@ -38,7 +39,7 @@ const stopSleep = () => {
   }, false);
 };
 
-export default function App() {
+const App = () => {
   // Clean the url in the browser bar.
   // This might need to go away if I ever want to auto-join from a fragment in the url
   window.history.replaceState({}, document.title, cleanUri());
@@ -53,6 +54,7 @@ export default function App() {
     setIsPlayer(true);
     setPlayerState(input);
   };
+  const roomId = useSelector(state => state.roomId);
   useEffect(() => {
     const infoFromStorage = JSON.parse(sessionStorage.getItem("roomInfo"));
     if (infoFromStorage) {
@@ -69,17 +71,13 @@ export default function App() {
   let ui;
   if (isPlayer) {
     stopSleep();
-    ui = <>
-      <Join {...playerState}/>
-    </>;
+    ui = <Join {...playerState}/>;
   } else if (host) {
     stopSleep();
     const roomId = sessionStorage.getItem("host_room_id") || randStringToUpperCase(roomIdNumChars);
     sessionStorage.setItem("host_room_id", roomId);
 
-    ui = <>
-      <Host roomId={roomId}/>
-    </>;
+    ui = <Host roomId={roomId}/>;
   } else {
     ui = <>
       <h4>Start a new trivia game with friends!</h4>
@@ -109,4 +107,6 @@ export default function App() {
       </Row>
     </Container>
   );
-}
+};
+
+export default App;

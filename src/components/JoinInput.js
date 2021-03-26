@@ -3,13 +3,19 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+import { useDispatch, useSelector } from 'react-redux';
+import { SET_ROOM_ID } from "../redux/constants";
+
 import { roomIdNumChars } from "../utils/helpers";
 import NameModal from "./NameModal";
 
-export default function JoinInput({ onSubmit = () => {}}) {
+const JoinInput = ({ onSubmit = () => {}}) => {
   const [roomId, setRoomId] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [roomIdIsInvalid, setRoomIdIsInvalid] = useState(false);
+  console.log(useSelector(state => state.roomId));
+
+  const dispatch = useDispatch();
 
   const roomIsValid = (e) => e.length === roomIdNumChars;
   const handleInputChangeRoom = (e) => {
@@ -25,6 +31,7 @@ export default function JoinInput({ onSubmit = () => {}}) {
       return;
     }
     setShowModal(true);
+    dispatch({ type: SET_ROOM_ID, roomId });
   };
 
   const handleNameSubmit = (name) => {
@@ -59,4 +66,5 @@ export default function JoinInput({ onSubmit = () => {}}) {
       <NameModal show={showModal} onSubmit={handleNameSubmit} onClose={() => setShowModal(false)}/>
     </>
   );
-}
+};
+export default JoinInput;
