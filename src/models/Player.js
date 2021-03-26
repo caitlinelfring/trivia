@@ -6,10 +6,21 @@ class Player {
     this.name = name;
     this.score = 0;
     this.answers = {};
+    this.connected = true;
   }
 
   send(data) {
     this.conn.send(data);
+  }
+
+  update(player) {
+    this.conn = player.conn;
+    this.connectionId = player.conn.connectionId;
+    this.connected = true;
+  }
+
+  disconnect() {
+    this.connected = false;
   }
 
   record(round, answer, correct) {
@@ -20,6 +31,9 @@ class Player {
   }
 
   isRoundComplete(round) {
+    if (!this.connected) {
+      return true;
+    }
     return !!this.answers[round];
   }
 
@@ -29,6 +43,7 @@ class Player {
       name: this.name,
       score: this.score,
       answers: this.answers,
+      connected: this.connected,
     };
   }
 

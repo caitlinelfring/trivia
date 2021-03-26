@@ -14,6 +14,10 @@ export default function Scoreboard(props) {
     return _correct ? "table-success" : "";
   };
 
+  const style = p => {
+    return {fontStyle: p.connected ? "" : "italic"};
+  };
+
   return (
     <Table striped bordered hover responsive size="sm">
       <thead>
@@ -24,7 +28,7 @@ export default function Scoreboard(props) {
       </thead>
       <tbody>
         {players.map((p, i)=> (
-          <tr className={correct(p)} key={i}>
+          <tr className={correct(p)} style={style(p)} key={i}>
             <td>{p.name}</td>
             <td>{p.score}</td>
           </tr>

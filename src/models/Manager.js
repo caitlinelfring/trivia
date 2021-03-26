@@ -17,7 +17,12 @@ export default class Manager {
   }
 
   addPlayer(player) {
-    this.players.push(player);
+    const existing = this.players.findIndex(p => p.name === player.name);
+    if (existing !== -1) {
+      this.players[existing].update(player);
+    } else {
+      this.players.push(player);
+    }
     if (this.questionManager.current) {
       this.sendQuestion();
     }
@@ -30,7 +35,7 @@ export default class Manager {
   removeId(id) {
     const idx = this.players.findIndex(p => p.connectionId === id);
     if (idx !== -1) {
-      this.players.splice(idx, 1);
+      this.players[idx].disconnect();
     }
   }
 
