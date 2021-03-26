@@ -1,8 +1,8 @@
-# Trivia
+# Trivia with Friends
 
 A group trivia game played remotely in your browser or on your phone!
 
-Play now at <https://caitlinelfring.github.io/trivia>
+Play now at <https://triviawithfriends.fun>
 
 There are no guarantees around this project. I am not a React developer, and there are plenty of bugs. Feel free to fork and fix them if you're interested.
 
