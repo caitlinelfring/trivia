@@ -46,7 +46,7 @@ export default function JoinInput({ onSubmit = () => {}}) {
             type="text"
             placeholder="XXXX"
             className="mx-auto"
-            style={{textTransform: "uppercase", width: "5ch", fontSize: "4em"}}
+            style={{textTransform: "uppercase", width: "7ch", fontSize: "4em", letterSpacing: "0.1em", textAlign: "center"}}
             maxLength={roomIdNumChars}
             onChange={handleInputChangeRoom}
           />

@@ -22,3 +22,10 @@ code {
 @media screen and (max-width: 600px) {
   .logo { max-width: 85%; }
 }
+
+/* https://stackoverflow.com/questions/20773665/fail-to-change-placeholder-color-with-bootstrap-3 */
+.form-control::-webkit-input-placeholder { opacity: 0.3; }  /* WebKit, Blink, Edge */
+.form-control:-moz-placeholder { opacity: 0.3; }  /* Mozilla Firefox 4 to 18 */
+.form-control::-moz-placeholder { opacity: 0.3; }  /* Mozilla Firefox 19+ */
+.form-control:-ms-input-placeholder { opacity: 0.3; }  /* Internet Explorer 10-11 */
+.form-control::-ms-input-placeholder { opacity: 0.3; }  /* Microsoft Edge */
