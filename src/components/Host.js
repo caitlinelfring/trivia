@@ -116,9 +116,9 @@ export default function Host(props) {
       <Col xs={12} md={8}>
         <div className="mb-5">
           <h3>
-            Trivia Game <Badge variant="secondary">{roomId}</Badge>
+            <Badge variant="secondary">{roomId}</Badge>
           </h3>
-          <p>Others can join this game by going to <code>{cleanUri()}</code> and joining this Game ID</p>
+          <p className="small">Others can join with this ID by going to <code>{cleanUri()}</code></p>
         </div>
         {(!started) && (
           <>
@@ -154,7 +154,7 @@ export default function Host(props) {
       </Col>
       <Col xs={12} md={4}>
         <div className="pt-2">
-          {players.length > 0 && <Scoreboard players={players} round={prepareRound} />}
+          <Scoreboard players={players} round={prepareRound} />
         </div>
       </Col>
     </Row>

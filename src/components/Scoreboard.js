@@ -1,6 +1,10 @@
 import {
   Table,
 } from "react-bootstrap";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckSquare, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+
 export default function Scoreboard(props) {
   const { players, round } = props;
   players.sort((a, b) => b.score - a.score);
@@ -14,15 +18,15 @@ export default function Scoreboard(props) {
     <Table striped bordered hover responsive size="sm">
       <thead>
         <tr>
-          <th>Score</th>
-          <th>Name</th>
+          <th><FontAwesomeIcon icon={faUserCircle} color="rgb(251, 148, 71)"/></th>
+          <th><FontAwesomeIcon icon={faCheckSquare} color="rgb(9, 120, 166)"/></th>
         </tr>
       </thead>
       <tbody>
         {players.map((p, i)=> (
           <tr className={correct(p)} key={i}>
-            <td>{p.score}</td>
             <td>{p.name}</td>
+            <td>{p.score}</td>
           </tr>
         ))}
       </tbody>

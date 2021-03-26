@@ -14,6 +14,7 @@ import Host from "./components/Host";
 import JoinInput from "./components/JoinInput";
 import { cleanUri, roomIdNumChars } from "./utils/helpers";
 import { randStringToUpperCase } from "./utils/random";
+import Logo from "./components/Logo.js";
 
 const addAlertUserListener = () => {
   if (process.env.NODE_ENV === "production") {
@@ -90,6 +91,13 @@ export default function App() {
 
   return (
     <Container fluid="md" className={"pt-4"}>
+      <Row>
+        <Col>
+          <div className="logo mx-auto p-5">
+            <Logo />
+          </div>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <Card className="text-center">
