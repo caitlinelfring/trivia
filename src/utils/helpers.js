@@ -10,12 +10,6 @@ export const errorAlert = (error) => {
 
 export const cleanUri = () => {
   const { protocol, host } = window.location;
-
-  // Running on github
-  if (host.includes("github")) {
-    const path = host.endsWith('/') ? 'trivia' : '/trivia';
-    return `${protocol}//${host}${path}`;
-  }
   return `${protocol}//${host}`;
 };
 
