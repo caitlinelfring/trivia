@@ -1,5 +1,11 @@
-# Trivia with Friends
+<p align="center">
+  <a href="https://triviawithfriends.fun">
+    <img alt="Trivia with Friends logo" src="https://raw.githubusercontent.com/caitlinelfring/trivia/main/src/static/logo.svg" height="100" />
+  </a>
+</p>
 
+---
+<br />
 A group trivia game played remotely in your browser or on your phone!
 
 Play now at <https://triviawithfriends.fun>
@@ -37,7 +43,6 @@ docker run -p 9000:9000 -d peerjs/peerjs-server
 * [ ] Give next button to host
 * [ ] Show answers afer each round
 * [ ] Require unique names
-* [ ] Player doesn't lose points if refreshing mid-game
 * [ ] Show player submitted status for round
 * [ ] Toast when new user joins
 * [ ] Avatars / colors
