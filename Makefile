@@ -1,7 +1,7 @@
-run:
+run: peerserver
 	docker run --rm -it -p 3000:3000 -v $$(pwd):/app -w /app node:14 bash
 
-start:
+start: peerserver
 	docker run --rm -it -p 3000:3000 -v $$(pwd):/app -w /app node:14 sh -c "npm install && npm start"
 
 peerserver:
