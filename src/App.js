@@ -82,9 +82,9 @@ export default function App() {
     </>;
   } else {
     ui = <>
-      <h4>Want to host a Trivia game? Start one now!</h4>
+      <h4>Start a new trivia game with friends!</h4>
       <Button size="lg" variant="primary" onClick={() => setHost(true)}>Start</Button>
-      <h4 className="pt-5">Or join a game someone's hosting</h4>
+      <h4 className="pt-5">Join someone else's game</h4>
       <JoinInput onSubmit={join} />
     </>;
   }
