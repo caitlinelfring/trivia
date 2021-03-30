@@ -1,14 +1,21 @@
-import { SET_ROOM_ID } from "../constants";
+import { SET_HOST, SET_PLAYER, SET_USER_TYPE } from "../constants";
 
 const initialState = {
-  roomId: null,
+  host: sessionStorage.getItem("host_info"),
+  player: sessionStorage.getItem("player_info"),
+  user_type: null,
 };
 
-function rootReducer(state = initialState, action) {
+function rootReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SET_ROOM_ID:
-      return {...state, roomId: action.roomId};
+    case SET_PLAYER:
+      return {...state, player: action.player};
+    case SET_HOST:
+      return {...state, host: action.host};
+    case SET_USER_TYPE:
+      return {...state, user_type: action.user_type};
     default:
+      console.warn(`no reducer found for action type: ${action.type}`);
       return state;
   }
 }

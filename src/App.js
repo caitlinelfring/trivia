@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   Button,
@@ -6,7 +6,7 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import NoSleep from 'nosleep.js';
 
@@ -16,6 +16,7 @@ import JoinInput from "./components/JoinInput";
 import { cleanUri, roomIdNumChars } from "./utils/helpers";
 import { randStringToUpperCase } from "./utils/random";
 import Logo from "./components/Logo.js";
+import { SET_HOST, SET_PLAYER, SET_USER_TYPE } from "./redux/constants";
 
 const addAlertUserListener = () => {
   if (process.env.NODE_ENV === "production") {
@@ -40,50 +41,55 @@ const stopSleep = () => {
 };
 
 const App = () => {
+  const dispatch = useDispatch();
+
   // Clean the url in the browser bar.
   // This might need to go away if I ever want to auto-join from a fragment in the url
   window.history.replaceState({}, document.title, cleanUri());
 
   useEffect(addAlertUserListener, []);
 
-  const [isPlayer, setIsPlayer] = useState(false);
-  const [host, setHost] = useState(false);
-  const [playerState, setPlayerState] = useState({roomId: "", name: ""});
+  const player = useSelector(state => state.player);
+  const host = useSelector(state => state.host);
+  const userType = useSelector(state => state.user_type);
 
-  const join = (input) => {
-    setIsPlayer(true);
-    setPlayerState(input);
+  const newGame = () => {
+    const roomId = sessionStorage.getItem("host_info") || randStringToUpperCase(roomIdNumChars);
+    sessionStorage.setItem("host_info", roomId);
+    dispatch({ type: SET_HOST, host: roomId });
+    dispatch({ type: SET_USER_TYPE, user_type: "host" });
   };
-  const roomId = useSelector(state => state.roomId);
-  useEffect(() => {
-    const infoFromStorage = JSON.parse(sessionStorage.getItem("roomInfo"));
-    if (infoFromStorage) {
-      join(infoFromStorage);
-    }
-  }, []);
 
   useEffect(() => {
-    if (sessionStorage.getItem("host_room_id")) {
-      setHost(true);
+    const p = JSON.parse(sessionStorage.getItem("player_info"));
+    console.log(p);
+    if (p) {
+      dispatch({ type: SET_PLAYER, player: p });
+      dispatch({ type: SET_USER_TYPE, user_type: "player" });
     }
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const roomId = sessionStorage.getItem("host_info");
+    if (roomId) {
+      dispatch({ type: SET_HOST, host: roomId });
+      dispatch({ type: SET_USER_TYPE, user_type: "host" });
+    }
+  }, [dispatch]);
 
   let ui;
-  if (isPlayer) {
+  if (userType === "player") {
     stopSleep();
-    ui = <Join {...playerState}/>;
-  } else if (host) {
+    ui = <Join {...player}/>;
+  } else if (userType === "host") {
     stopSleep();
-    const roomId = sessionStorage.getItem("host_room_id") || randStringToUpperCase(roomIdNumChars);
-    sessionStorage.setItem("host_room_id", roomId);
-
-    ui = <Host roomId={roomId}/>;
+    ui = <Host roomId={host}/>;
   } else {
     ui = <>
       <h4>Start a new trivia game with friends!</h4>
-      <Button size="lg" variant="primary" onClick={() => setHost(true)}>Start</Button>
+      <Button size="lg" variant="primary" onClick={() => newGame()}>Start</Button>
       <h4 className="pt-5">Join someone else's game</h4>
-      <JoinInput onSubmit={join} />
+      <JoinInput />
     </>;
   }
 

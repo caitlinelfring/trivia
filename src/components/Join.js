@@ -8,9 +8,7 @@ import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
 import LeaveButton from "./LeaveButton";
 
-function Join(props) {
-  const { name, roomId } = props;
-
+const Join = ({ name, roomId }) => {
   const [connected, setConnected] = useState(false);
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
@@ -70,6 +68,6 @@ function Join(props) {
       {(!prepareRound && gameComplete) && <WinnerView players={gameComplete} />}
     </>
   );
-}
+};
 
 export default Join;

@@ -3,21 +3,21 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import { useDispatch, useSelector } from 'react-redux';
-import { SET_ROOM_ID } from "../redux/constants";
+import { useDispatch } from 'react-redux';
+import { SET_PLAYER, SET_USER_TYPE } from "../redux/constants";
 
 import { roomIdNumChars } from "../utils/helpers";
 import NameModal from "./NameModal";
 
-const JoinInput = ({ onSubmit = () => {}}) => {
+const roomIsValid = (e) => e.length === roomIdNumChars;
+
+const JoinInput = () => {
   const [roomId, setRoomId] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [roomIdIsInvalid, setRoomIdIsInvalid] = useState(false);
-  console.log(useSelector(state => state.roomId));
 
   const dispatch = useDispatch();
 
-  const roomIsValid = (e) => e.length === roomIdNumChars;
   const handleInputChangeRoom = (e) => {
     const { value } = e.target;
     setRoomIdIsInvalid(false);
@@ -31,15 +31,17 @@ const JoinInput = ({ onSubmit = () => {}}) => {
       return;
     }
     setShowModal(true);
-    dispatch({ type: SET_ROOM_ID, roomId });
   };
 
   const handleNameSubmit = (name) => {
     setShowModal(false);
     console.log(`Submitting name: ${name}, roomId: ${roomId}`);
-    onSubmit({ roomId, name });
-    sessionStorage.setItem("roomInfo", JSON.stringify({ roomId, name }));
+    const player = { roomId, name };
+    sessionStorage.setItem("player_info", JSON.stringify(player));
+    dispatch({ type: SET_PLAYER, player });
+    dispatch({ type: SET_USER_TYPE, user_type: "player" });
   };
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
