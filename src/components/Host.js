@@ -6,6 +6,7 @@ import {
   Spinner,
   ProgressBar,
 } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import Scoreboard from "./Scoreboard";
 import WinnerView from "./WinnerView";
@@ -28,9 +29,10 @@ export default function Host(props) {
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
-  const [category, setCategory] = useState(0);
   const [categories, setCategories] = useState([]);
   const [winners, setWinners] = useState(null);
+
+  const category = useSelector(state => state.category);
 
   manager.onRoundComplete = () => {
     setPrepareRound(manager.round);
@@ -122,7 +124,7 @@ export default function Host(props) {
         </div>
         {(!started) && (
           <>
-            <CategoryDropDown categories={categories} onSelect={setCategory} />
+            <CategoryDropDown categories={categories} />
             <StartButton isLoading={players.length === 0} onClick={() => setStarted(true)} />
             <LeaveButton />
           </>

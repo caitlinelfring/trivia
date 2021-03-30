@@ -52,7 +52,7 @@ export default class QuestionManager {
     }
 
     if (category) {
-      query["category"] = category;
+      query["category"] = category.id;
     }
 
     const response = await this.apiRequest(query);
