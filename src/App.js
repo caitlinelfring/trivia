@@ -5,10 +5,10 @@ import {
   Container,
   Row,
   Col,
-} from 'react-bootstrap';
+} from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 
-import NoSleep from 'nosleep.js';
+import NoSleep from "nosleep.js";
 
 import Join from "./components/Join";
 import Host from "./components/Host";
@@ -34,8 +34,8 @@ const addAlertUserListener = () => {
 const stopSleep = () => {
   // Stop the screen from going to sleep
   const noSleep = new NoSleep();
-  document.addEventListener('click', function enableNoSleep() {
-    document.removeEventListener('click', enableNoSleep, false);
+  document.addEventListener("click", function enableNoSleep() {
+    document.removeEventListener("click", enableNoSleep, false);
     noSleep.enable();
   }, false);
 };

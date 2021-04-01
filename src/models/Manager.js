@@ -63,10 +63,10 @@ export default class Manager {
       const onData = (d) => {
         console.log(`got message from player ${player.name}. Correct? ${this.questionManager.current.isCorrect(d.answer)}`);
         player.record(this.round, d.answer, this.questionManager.current.isCorrect(d.answer));
-        player.conn.off('data', onData);
+        player.conn.off("data", onData);
         this.goToNextRound();
       };
-      player.conn.on('data', onData);
+      player.conn.on("data", onData);
       player.send({"newQuestion": this.questionManager.current.forPlayer()});
     });
     this.onNewQuestion(this.questionManager.current.forPlayer());

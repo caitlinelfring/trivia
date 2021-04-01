@@ -1,5 +1,5 @@
-import { useDispatch } from 'react-redux';
-import Select from 'react-select';
+import { useDispatch } from "react-redux";
+import Select from "react-select";
 import { SET_CATEGORY } from "../redux/constants";
 
 export const CategoryDropDown = ({categories = [], onSelect = () => {}}) => {

@@ -3,7 +3,8 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
+import { setPlayer } from "../redux/actions";
 import { SET_PLAYER, SET_USER_TYPE } from "../redux/constants";
 
 import { roomIdNumChars } from "../utils/helpers";
