@@ -10,9 +10,6 @@ import {combineReducers} from "redux";
 import user from "./user";
 
 const initialState = {
-  host: sessionStorage.getItem("host_info"),
-  player: sessionStorage.getItem("player_info"),
-  user_type: null,
   category: null,
   categories: [],
   questions: [],

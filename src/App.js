@@ -13,11 +13,9 @@ import NoSleep from "nosleep.js";
 import Join from "./components/Join";
 import Host from "./components/Host";
 import JoinInput from "./components/JoinInput";
-import { cleanUri, roomIdNumChars } from "./utils/helpers";
-import { randStringToUpperCase } from "./utils/random";
+import { cleanUri } from "./utils/helpers";
 import Logo from "./components/Logo.js";
-import { SET_HOST } from "./redux/constants";
-import { setHost, setPlayer } from "./redux/actions";
+import { setHost } from "./redux/actions";
 
 const addAlertUserListener = () => {
   if (process.env.NODE_ENV === "production") {
@@ -51,32 +49,7 @@ const App = () => {
   useEffect(addAlertUserListener, []);
 
   const player = useSelector(state => state.user.player);
-  console.log(`player: ${JSON.stringify(player)}`);
   const host = useSelector(state => state.user.host);
-  console.log(`host: ${JSON.stringify(host)}`);
-  const userType = useSelector(state => state.user.type);
-  console.log(`userType: ${JSON.stringify(userType)}`);
-
-  // const newGame = () => {
-  //   const roomId = sessionStorage.getItem("host_info") || randStringToUpperCase(roomIdNumChars);
-  //   sessionStorage.setItem("host_info", roomId);
-  //   dispatch(setHost(roomId));
-  // };
-
-  // useEffect(() => {
-  //   const p = JSON.parse(sessionStorage.getItem("player_info"));
-  //   console.log(p);
-  //   if (p) {
-  //     dispatch(setPlayer(p));
-  //   }
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   const roomId = sessionStorage.getItem("host_info");
-  //   if (roomId) {
-  //     dispatch(setHost(roomId));
-  //   }
-  // }, [dispatch]);
 
   let ui;
   if (player) {
