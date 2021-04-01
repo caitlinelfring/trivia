@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  trivia:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+  peerjs:
+    image: peerjs/peerjs-server
+    ports:
+      - "9000:9000"

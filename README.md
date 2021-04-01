@@ -23,19 +23,27 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ## Run locally
 
-```bash
+### Docker-compose
 
+[Install docker-compose](https://docs.docker.com/compose/install/)
+
+Then run `docker-compose up` to start trivia and a local PeerJS server. Access via <http://localhost:3000>
+
+### Without docker
+
+*Not recommended, please use docker*
+
+Requirements: Node 14
+
+```bash
 npm install
 
 npm start
 ```
+
 and access via `http://localhost:3000`
 
-**To run a local PeerServer**
-
-```bash
-docker run -p 9000:9000 -d peerjs/peerjs-server
-```
+See [here](https://github.com/peers/peerjs-server#natively) for documentation for running a PeerJS server locally.
 
 ## TODO
 
