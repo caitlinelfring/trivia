@@ -8,10 +8,9 @@ import {
 } from "react-bootstrap";
 
 
-export default function QuestionView(props) {
-  const { question, isHost = false, onSelected = () => {}} = props;
-
+export default function QuestionView({ question, isHost = false, onSelected = () => {}}) {
   const [selected, setSelected] = useState(null);
+
   const selectionVariant = (i) => {
     if (isHost) {
       return "secondary";

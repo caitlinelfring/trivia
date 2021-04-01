@@ -38,9 +38,7 @@ const JoinInput = () => {
     setShowModal(false);
     console.log(`Submitting name: ${name}, roomId: ${roomId}`);
     const player = { roomId, name };
-    sessionStorage.setItem("player_info", JSON.stringify(player));
-    dispatch({ type: SET_PLAYER, player });
-    dispatch({ type: SET_USER_TYPE, user_type: "player" });
+    dispatch(setPlayer(player));
   };
 
   return (

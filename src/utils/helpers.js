@@ -18,3 +18,11 @@ export const getWinners = (players) => {
   const top = sorted[0].score;
   return sorted.filter(p => p.score === top);
 };
+
+export const jsonParseSessionStorage = (key, def = {}) => {
+  try {
+    return JSON.parse(sessionStorage.getItem(key));
+  } catch (e) {
+    return def;
+  }
+};

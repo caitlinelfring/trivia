@@ -1,26 +1,42 @@
-import { SET_HOST, SET_PLAYER, SET_USER_TYPE, SET_CATEGORY } from "../constants";
+import {
+  SET_CATEGORY,
+  SET_CATEGORIES,
+  SET_QUESTIONS,
+  SET_CURRENT_QUESTION,
+} from "../constants";
+
+import {combineReducers} from "redux";
+
+import user from "./user";
 
 const initialState = {
   host: sessionStorage.getItem("host_info"),
   player: sessionStorage.getItem("player_info"),
   user_type: null,
   category: null,
+  categories: [],
+  questions: [],
+  current_question: null,
 };
 
-function rootReducer(state = initialState, action = {}) {
+function base(state = initialState, action = {}) {
   switch (action.type) {
-    case SET_PLAYER:
-      return {...state, player: action.player};
-    case SET_HOST:
-      return {...state, host: action.host};
     case SET_CATEGORY:
       return {...state, category: action.category};
-    case SET_USER_TYPE:
-      return {...state, user_type: action.user_type};
+    case SET_CATEGORIES:
+      return {...state, categories: action.categories};
+    case SET_QUESTIONS:
+      return {...state, questions: action.questions};
+    case SET_CURRENT_QUESTION:
+      return {...state, current_question: action.current_question};
     default:
       console.warn(`no reducer found for action type: ${action.type}`);
       return state;
   }
 }
 
+const rootReducer = combineReducers({
+    user,
+    base,
+});
 export default rootReducer;

@@ -7,7 +7,13 @@ import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 import rootReducer from "./redux/reducers";
 
-const store = createStore(rootReducer);
+const reactDevTool = (process.env.NODE_ENV !== "production" && window.__REDUX_DEVTOOLS_EXTENSION__)
+  && window.__REDUX_DEVTOOLS_EXTENSION__();
+
+const store = createStore(
+  rootReducer,
+  reactDevTool,
+);
 
 render(
   <Provider store={store}>
