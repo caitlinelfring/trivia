@@ -11,11 +11,10 @@ export const setPlayer = (player) => {
   return { type: SET_USER_TYPE, payload: {type: "player", player: player} };
 };
 
-const HOST_INFO = "host_info";
 export const setHost = (roomId) => {
   if (!roomId) {
     roomId = jsonParseSessionStorage("host_info").roomId || randStringToUpperCase(roomIdNumChars);
   }
-  sessionStorage.setItem(HOST_INFO, JSON.stringify({ roomId }));
+  sessionStorage.setItem("host_info", JSON.stringify({ roomId }));
   return { type: SET_USER_TYPE, payload: {type: "host", host: { roomId }} };
 };

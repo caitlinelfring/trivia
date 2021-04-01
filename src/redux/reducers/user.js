@@ -24,6 +24,4 @@ const user = (state = initialState, action = {}) => {
   }
 };
 
-
-
 export default user;
