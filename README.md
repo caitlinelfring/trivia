@@ -49,10 +49,9 @@ See [here](https://github.com/peers/peerjs-server#natively) for documentation fo
 
 * [ ] Stylize winner page
 * [ ] Give next button to host
-* [ ] Show answers afer each round
+* [ ] Show answers after each round
 * [ ] Require unique names
 * [ ] Show player submitted status for round
 * [ ] Toast when new user joins
 * [ ] Avatars / colors
 * [ ] Round timer
-* [ ] Use bootstrap alert instead of `alert("error")`

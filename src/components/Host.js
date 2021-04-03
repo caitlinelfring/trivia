@@ -17,6 +17,7 @@ import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
 import { cleanUri } from "../utils/helpers";
 import { CategoryDropDown } from "./CategoryDropdown";
+import ErrorAlert from "./ErrorAlert";
 
 const manager = new Manager();
 
@@ -31,6 +32,7 @@ export default function Host(props) {
   const [peer, setPeer] = useState(null);
   const [categories, setCategories] = useState([]);
   const [winners, setWinners] = useState(null);
+  const [error, setError] = useState(null);
 
   const category = useSelector(state => state.category);
 
@@ -72,7 +74,7 @@ export default function Host(props) {
     };
 
     if (!peer || peer.id !== roomId) {
-      setPeer(new HostPeer(roomId, onConnectionOpened, onConnectionClosed));
+      setPeer(new HostPeer(roomId, onConnectionOpened, onConnectionClosed, setError));
     }
 
     const disconnect = () => {
@@ -114,6 +116,13 @@ export default function Host(props) {
   };
 
   return (
+    <>
+    {error && <Row>
+      <Col>
+        <ErrorAlert error={error} />
+      </Col>
+    </Row>}
+
     <Row>
       <Col xs={12} md={8}>
         <div className="mb-5">
@@ -160,5 +169,6 @@ export default function Host(props) {
         </div>
       </Col>
     </Row>
+    </>
   );
 }

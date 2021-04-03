@@ -1,13 +1,5 @@
 export const roomIdNumChars = 4;
 
-export const errorAlert = (error) => {
-  if (!alert(`There has been an error; the page will now refresh.\n${error}`)) {
-    window.location.reload();
-    // sessionStorage.clear();
-  }
-  console.error(error);
-};
-
 export const cleanUri = () => {
   const { protocol, host } = window.location;
   return `${protocol}//${host}`;

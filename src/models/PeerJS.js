@@ -3,8 +3,6 @@
 // https://github.com/peers/peerjs/issues/671#issuecomment-657085176
 
 import Peer from "peerjs";
-
-import { errorAlert } from "../utils/helpers";
 import Player from "./Player";
 
 const noop = () => { };
@@ -33,11 +31,12 @@ if (process.env.NODE_ENV === "production") {
   };
 }
 
-export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed = noop) {
+export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed = noop, onError = noop) {
   const peer = new Peer(roomId, peerConfig);
   peer.on("error", (err) => {
+    console.error(err);
     console.error(err.type);
-    errorAlert(err);
+    onError(err);
   });
 
   peer.on("open", function (id) {
@@ -63,7 +62,7 @@ export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed =
   return peer;
 }
 
-export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = noop, onClose = noop) {
+export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = noop, onClose = noop, onError = noop) {
   // hacky re-connect logic when the host disconnects
   let conn;
   const newConnection = (p) => {
@@ -96,8 +95,9 @@ export function PlayerPeer(roomId, metadata = {}, onData = noop, onConnected = n
 
   const peer = new Peer(sessionStorage.getItem("peer_id"), peerConfig);
   peer.on("error", (err) => {
+    // https://peerjs.com/docs.html#peeron-error
     sessionStorage.removeItem("peer_id");
-    errorAlert(err);
+    onError(err);
   });
 
   peer.on("disconnected", () => {
