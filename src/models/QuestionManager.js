@@ -26,7 +26,6 @@ export default class QuestionManager {
       this.sessionToken = await this.getSessionToken();
     }
     this.questions = await this.getQuestions(this.selectedCategory, this.sessionToken, DEFAULT_QUESTIONS);
-    console.log(`got questions: ${JSON.stringify(this.questions)}`);
   }
 
   async populateCategories() {
@@ -45,14 +44,14 @@ export default class QuestionManager {
   }
 
   async getQuestions(category = null, token = null, num = 1) {
-    const query = { "amount": num, "encode": "url3986", "type": "multiple" };
+    const query = { "amount": num, "encode": "url3986" };
 
     if (token) {
       query["token"] = token;
     }
 
     if (category) {
-      query["category"] = category;
+      query["category"] = category.id;
     }
 
     const response = await this.apiRequest(query);

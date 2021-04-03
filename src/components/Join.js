@@ -7,15 +7,15 @@ import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
 import LeaveButton from "./LeaveButton";
+import ErrorAlert from "./ErrorAlert";
 
-function Join(props) {
-  const { name, roomId } = props;
-
+const Join = ({ name, roomId }) => {
   const [connected, setConnected] = useState(false);
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
   const [gameComplete, setGameComplete] = useState(null);
   const [peer, setPeer] = useState(null);
+  const [error, setError] = useState(null);
 
   const onData = (data) => {
     if (typeof data === "object") {
@@ -34,14 +34,14 @@ function Join(props) {
   };
   const onConnected = () => setConnected(true);
   const onClose = () => {
-    console.log("onClose");
     setConnected(false);
     setPrepareRound(null);
     setQuestion(null);
     setGameComplete(false);
   };
+
   useEffect(() => {
-    !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected, onClose));
+    !peer && setPeer(new PlayerPeer(roomId, { name, roomId }, onData, onConnected, onClose, setError));
   }, [name, roomId, peer]);
 
   const choiceSelected = (choice) => {
@@ -53,16 +53,20 @@ function Join(props) {
     peer.connections[roomId].forEach(send);
   };
 
+  const showSpinner = !connected && !error;
+  const spinner = <Spinner animation="border" variant="primary" />;
+
   return (
     <>
-      {connected || <Spinner animation="border" variant="primary" />}
-      <h4 className="mb-5">{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
+      {error && <ErrorAlert error={error} />}
+      {showSpinner && spinner}
+      <h4 className="m-5">{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
       {(!question && connected && !prepareRound) && <p>Waiting for host to start the game.</p>}
       {(!question && !prepareRound) && <LeaveButton />
       }
       {(!!prepareRound && !gameComplete) &&
         <>
-          <Spinner animation="border" variant="primary" />
+          {spinner}
           <h5>Prepare for round {prepareRound}</h5>
         </>
       }
@@ -70,6 +74,6 @@ function Join(props) {
       {(!prepareRound && gameComplete) && <WinnerView players={gameComplete} />}
     </>
   );
-}
+};
 
 export default Join;

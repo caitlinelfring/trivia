@@ -6,6 +6,7 @@ import {
   Spinner,
   ProgressBar,
 } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import Scoreboard from "./Scoreboard";
 import WinnerView from "./WinnerView";
@@ -16,11 +17,11 @@ import QuestionView from "./QuestionView";
 import Manager from "../models/Manager";
 import { cleanUri } from "../utils/helpers";
 import { CategoryDropDown } from "./CategoryDropdown";
+import ErrorAlert from "./ErrorAlert";
 
 const manager = new Manager();
 
-export default function Host(props) {
-  const { roomId } = props;
+export default function Host({ roomId }) {
   manager.roomId = roomId;
   const [players, setPlayers] = useState([]);
   const [started, setStarted] = useState(false);
@@ -28,9 +29,11 @@ export default function Host(props) {
   const [question, setQuestion] = useState(null);
   const [prepareRound, setPrepareRound] = useState(null);
   const [peer, setPeer] = useState(null);
-  const [category, setCategory] = useState(0);
   const [categories, setCategories] = useState([]);
   const [winners, setWinners] = useState(null);
+  const [error, setError] = useState(null);
+
+  const category = useSelector(state => state.base.category);
 
   manager.onRoundComplete = () => {
     setPrepareRound(manager.round);
@@ -70,11 +73,10 @@ export default function Host(props) {
     };
 
     if (!peer || peer.id !== roomId) {
-      setPeer(new HostPeer(roomId, onConnectionOpened, onConnectionClosed));
+      setPeer(new HostPeer(roomId, onConnectionOpened, onConnectionClosed, setError));
     }
 
     const disconnect = () => {
-      console.log("Triggered disconnect");
       if (peer) {
         manager.reset();
         peer.disconnect();
@@ -103,7 +105,6 @@ export default function Host(props) {
   }, [started]);
 
   const newGame = () => {
-    console.log("new game");
     manager.newGame().then(() => {
       setGameComplete(false);
       setStarted(true);
@@ -112,6 +113,13 @@ export default function Host(props) {
   };
 
   return (
+    <>
+    {error && <Row>
+      <Col>
+        <ErrorAlert error={error} />
+      </Col>
+    </Row>}
+
     <Row>
       <Col xs={12} md={8}>
         <div className="mb-5">
@@ -122,7 +130,7 @@ export default function Host(props) {
         </div>
         {(!started) && (
           <>
-            <CategoryDropDown categories={categories} onSelect={setCategory} />
+            <CategoryDropDown categories={categories} />
             <StartButton isLoading={players.length === 0} onClick={() => setStarted(true)} />
             <LeaveButton />
           </>
@@ -148,6 +156,7 @@ export default function Host(props) {
         )}
         {(started && gameComplete) && <>
           {winners}
+          <CategoryDropDown categories={categories} />
           <StartButton onClick={() => newGame()} text={"New Game"} isLoading={false} />
           <LeaveButton />
         </>}
@@ -158,5 +167,6 @@ export default function Host(props) {
         </div>
       </Col>
     </Row>
+    </>
   );
 }

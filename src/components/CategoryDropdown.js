@@ -1,24 +1,30 @@
-import Select from 'react-select';
+import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
+import { SET_CATEGORY } from "../redux/constants";
 
-export const CategoryDropDown = ({categories = [], onSelect = () => {}}) => {
+const categoryToOption = (c) => {
+  return { value: c.id, label: c.name };
+};
+
+export const CategoryDropDown = ({categories = [] }) => {
+  const dispatch = useDispatch();
   const handleChange = selectedOption => {
-    const selected = categories.filter(c => c.id === selectedOption.value)[0];
-    onSelect(selected.id || 0);
+    const cat = categories.find(c => c.id === selectedOption.value);
+    dispatch({ type: SET_CATEGORY, category: cat });
   };
+  const category = useSelector(state => state.base.category);
 
   if (categories.length === 0) {
     return null;
   }
 
-  const options = [{value: 0, label: "All"}, ...categories.map(c => {
-    return { value: c.id, label: c.name };
-  })];
+  const options = [{value: 0, label: "All"}, ...categories.map(categoryToOption)];
 
   return (
     <div className="text-left">
       <label className="d-block">Select a Category</label>
       <Select
-        defaultValue={options[0]}
+        defaultValue={category ? categoryToOption(category) : options[0]}
         onChange={handleChange}
         options={options}
       />

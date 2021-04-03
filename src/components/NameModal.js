@@ -2,8 +2,8 @@ import {
   Button,
   Modal,
   Form,
-} from 'react-bootstrap';
-import { random } from '../utils/random';
+} from "react-bootstrap";
+import { random } from "../utils/random";
 
 const placeholders = [
   "Moira Rose",

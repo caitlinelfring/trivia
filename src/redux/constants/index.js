@@ -1,0 +1,8 @@
+export const SET_PLAYER_ROOM_ID = "SET_PLAYER_ROOM_ID";
+export const SET_HOST = "SET_HOST";
+export const SET_PLAYER = "SET_PLAYER";
+export const SET_USER_TYPE = "SET_USER_TYPE";
+export const SET_CATEGORY = "SET_CATEGORY";
+export const SET_QUESTIONS = "SET_QUESTIONS";
+export const SET_CATEGORIES = "SET_CATEGORIES";
+export const SET_CURRENT_QUESTION = "SET_CURRENT_QUESTION";
