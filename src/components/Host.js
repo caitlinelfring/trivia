@@ -21,8 +21,7 @@ import ErrorAlert from "./ErrorAlert";
 
 const manager = new Manager();
 
-export default function Host(props) {
-  const { roomId } = props;
+export default function Host({ roomId }) {
   manager.roomId = roomId;
   const [players, setPlayers] = useState([]);
   const [started, setStarted] = useState(false);
@@ -34,7 +33,7 @@ export default function Host(props) {
   const [winners, setWinners] = useState(null);
   const [error, setError] = useState(null);
 
-  const category = useSelector(state => state.category);
+  const category = useSelector(state => state.base.category);
 
   manager.onRoundComplete = () => {
     setPrepareRound(manager.round);
@@ -159,6 +158,7 @@ export default function Host(props) {
         )}
         {(started && gameComplete) && <>
           {winners}
+          <CategoryDropDown categories={categories} />
           <StartButton onClick={() => newGame()} text={"New Game"} isLoading={false} />
           <LeaveButton />
         </>}
