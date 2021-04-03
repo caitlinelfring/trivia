@@ -77,7 +77,6 @@ export default function Host({ roomId }) {
     }
 
     const disconnect = () => {
-      console.log("Triggered disconnect");
       if (peer) {
         manager.reset();
         peer.disconnect();
@@ -106,7 +105,6 @@ export default function Host({ roomId }) {
   }, [started]);
 
   const newGame = () => {
-    console.log("new game");
     manager.newGame().then(() => {
       setGameComplete(false);
       setStarted(true);

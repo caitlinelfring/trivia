@@ -13,7 +13,6 @@ export const CategoryDropDown = ({categories = [] }) => {
     dispatch({ type: SET_CATEGORY, category: cat });
   };
   const category = useSelector(state => state.base.category);
-  console.log(category);
 
   if (categories.length === 0) {
     return null;

@@ -34,7 +34,6 @@ const Join = ({ name, roomId }) => {
   };
   const onConnected = () => setConnected(true);
   const onClose = () => {
-    console.log("onClose");
     setConnected(false);
     setPrepareRound(null);
     setQuestion(null);

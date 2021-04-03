@@ -26,7 +26,6 @@ export default class QuestionManager {
       this.sessionToken = await this.getSessionToken();
     }
     this.questions = await this.getQuestions(this.selectedCategory, this.sessionToken, DEFAULT_QUESTIONS);
-    console.log(`got questions: ${JSON.stringify(this.questions)}`);
   }
 
   async populateCategories() {

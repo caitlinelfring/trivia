@@ -16,10 +16,8 @@ const user = (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_USER_TYPE:
       const { type, host, player } = action.payload;
-      console.log(action.payload);
       return {...state, type, host, player};
     default:
-      console.warn(`no reducer found for action type: ${action.type}`);
       return state;
   }
 };
