@@ -47,7 +47,7 @@ const Join = ({ name, roomId }) => {
       console.error(`Not sending choice, no connections for roomId ${roomId}`);
       return;
     }
-    const send = (c) => c.send({ name: name, answer: choice, question: question.question });
+    const send = (c) => c.send({ answer: choice, question: question.question });
     peer.connections[roomId].forEach(send);
   };
 
