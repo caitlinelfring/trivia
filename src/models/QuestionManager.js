@@ -45,7 +45,7 @@ export default class QuestionManager {
   }
 
   async getQuestions(category = null, token = null, num = 1) {
-    const query = { "amount": num, "encode": "url3986", "type": "multiple" };
+    const query = { "amount": num, "encode": "url3986" };
 
     if (token) {
       query["token"] = token;
