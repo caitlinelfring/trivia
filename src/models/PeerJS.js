@@ -7,29 +7,16 @@ import Player from "./Player";
 
 const noop = () => { };
 
-let peerConfig = {
-  host: "localhost",
-  port: 9000,
-  path: "/myapp",
-  // debug: 3,
-};
-if (process.env.NODE_ENV === "production") {
-  // TODO: host my own
-  peerConfig = {
-    host: "peerjs.92k.de",
-    port: 443,
-    secure: true,
-    config: {
-      "iceServers": [
-        { url: "stun:stun.l.google.com:19302" },
-        { url: "stun:stun1.l.google.com:19302" },
-        { url: "stun:stun2.l.google.com:19302" },
-        { url: "stun:stun3.l.google.com:19302" },
-        { url: "stun:stun4.l.google.com:19302" },
-      ],
-    },
+const peerConfig = (process.env.NODE_ENV === "production") ?
+  // Use default peerjs server
+  {} :
+  // Use local peerjs server for local dev
+  {
+    host: "localhost",
+    port: 9000,
+    path: "/myapp",
+    // debug: 3,
   };
-}
 
 export function HostPeer(roomId, onConnectionOpened = noop, onConnectionClosed = noop, onError = noop) {
   const peer = new Peer(roomId, peerConfig);
