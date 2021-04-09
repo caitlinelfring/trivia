@@ -3,6 +3,7 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+import ReactGA from "react-ga";
 import { useDispatch } from "react-redux";
 import { setPlayer } from "../redux/actions";
 import { roomIdNumChars } from "../utils/helpers";
@@ -30,6 +31,7 @@ const JoinInput = () => {
       return;
     }
     setShowModal(true);
+    ReactGA.modalview("/join/name");
   };
 
   const handleNameSubmit = (name) => {
@@ -37,6 +39,10 @@ const JoinInput = () => {
     console.log(`Submitting name: ${name}, roomId: ${roomId}`);
     const player = { roomId, name };
     dispatch(setPlayer(player));
+    // ReactGA.event({
+    //   category: "Player",
+    //   action: "joined",
+    // });
   };
 
   return (

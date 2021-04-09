@@ -4,12 +4,13 @@ import { render } from "react-dom";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./redux/reducers";
 
 import "./index.css";
 import App from "./App";
+import { gaMiddleware } from "./redux/tracking";
 import reportWebVitals from "./reportWebVitals";
 
 const reactDevTool = (process.env.NODE_ENV !== "production" && window.__REDUX_DEVTOOLS_EXTENSION__)
@@ -18,6 +19,7 @@ const reactDevTool = (process.env.NODE_ENV !== "production" && window.__REDUX_DE
 const store = createStore(
   rootReducer,
   reactDevTool,
+  applyMiddleware(gaMiddleware),
 );
 
 Sentry.init({

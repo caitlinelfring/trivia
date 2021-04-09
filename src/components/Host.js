@@ -7,6 +7,7 @@ import {
   ProgressBar,
 } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import ReactGA from "react-ga";
 
 import Scoreboard from "./Scoreboard";
 import WinnerView from "./WinnerView";
@@ -40,6 +41,11 @@ export default function Host({ roomId }) {
     // TODO: update players correctly
     setPlayers([]);
     setPlayers(manager.players);
+    ReactGA.event({
+      category: "Round",
+      action: "completed",
+      value: manager.round,
+    });
   };
   manager.onNewQuestion = (q) => {
     setPrepareRound(null);
@@ -48,6 +54,10 @@ export default function Host({ roomId }) {
   manager.onGameComplete = () => {
     setGameComplete(true);
     setPrepareRound(null);
+    ReactGA.event({
+      category: "Game",
+      action: "completed",
+    });
   };
 
   // FIXME: is there a better way to ensure WinnerView is only rendered once when the round completes?
@@ -63,6 +73,10 @@ export default function Host({ roomId }) {
       // TODO: update players correctly
       setPlayers([]);
       setPlayers(manager.players);
+      ReactGA.event({
+        category: "Player",
+        action: "joined",
+      });
     };
     const onConnectionClosed = (id) => {
       console.log(`connection closed: ${id}`);
@@ -70,6 +84,10 @@ export default function Host({ roomId }) {
       // TODO: update players correctly
       setPlayers([]);
       setPlayers(manager.players);
+      ReactGA.event({
+        category: "Player",
+        action: "left",
+      });
     };
 
     if (!peer || peer.id !== roomId) {
@@ -105,6 +123,10 @@ export default function Host({ roomId }) {
   }, [started]);
 
   const newGame = () => {
+    ReactGA.event({
+      category: "Game",
+      action: "new",
+    });
     manager.newGame().then(() => {
       setGameComplete(false);
       setStarted(true);
@@ -132,7 +154,7 @@ export default function Host({ roomId }) {
           <>
             <CategoryDropDown categories={categories} />
             <StartButton isLoading={players.length === 0} onClick={() => setStarted(true)} />
-            <LeaveButton />
+            <LeaveButton trackingType="Host"/>
           </>
         )}
         {(!!prepareRound && !gameComplete) &&
@@ -158,7 +180,7 @@ export default function Host({ roomId }) {
           {winners}
           <CategoryDropDown categories={categories} />
           <StartButton onClick={() => newGame()} text={"New Game"} isLoading={false} />
-          <LeaveButton />
+          <LeaveButton trackingType="Host"/>
         </>}
       </Col>
       <Col xs={12} md={4}>

@@ -3,6 +3,8 @@ import {
   Spinner,
   Badge,
 } from "react-bootstrap";
+import ReactGA from "react-ga";
+
 import { PlayerPeer } from "../models/PeerJS";
 import QuestionView from "./QuestionView";
 import WinnerView from "./WinnerView";
@@ -51,6 +53,10 @@ const Join = ({ name, roomId }) => {
     }
     const send = (c) => c.send({ answer: choice, question: question.question });
     peer.connections[roomId].forEach(send);
+    ReactGA.event({
+      category: "Player",
+      action: "choice selected",
+    });
   };
 
   const showSpinner = !connected && !error;
@@ -62,7 +68,7 @@ const Join = ({ name, roomId }) => {
       {showSpinner && spinner}
       <h4 className="m-5">{connected ? "Joined" : "Joining"} room <Badge variant="secondary">{roomId}</Badge> {`as ${name}`}</h4>
       {(!question && connected && !prepareRound) && <p>Waiting for host to start the game.</p>}
-      {(!question && !prepareRound) && <LeaveButton />
+      {(!question && !prepareRound) && <LeaveButton trackingType={"Player"}/>
       }
       {(!!prepareRound && !gameComplete) &&
         <>
