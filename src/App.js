@@ -35,7 +35,11 @@ const stopSleep = () => {
   const noSleep = new NoSleep();
   document.addEventListener("click", function enableNoSleep() {
     document.removeEventListener("click", enableNoSleep, false);
-    noSleep.enable();
+    try {
+      noSleep.enable();
+    } catch (error) {
+      console.error(error);
+    }
   }, false);
 };
 
